@@ -625,6 +625,252 @@ footer p {
   font-size: 13px;
 }
 
+/* CHAT WIDGET */
+
+.chat-widget {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.chat-toggle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: none;
+  background: #d4af37;
+  color: #111;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(212, 175, 55, 0.4);
+  transition: 0.3s;
+}
+
+.chat-toggle:hover {
+  transform: scale(1.06);
+}
+
+.chat-panel {
+  width: 340px;
+  max-width: calc(100vw - 50px);
+  height: 460px;
+  max-height: calc(100vh - 140px);
+  background: #151515;
+  border: 1px solid #292929;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  animation: chatPop 0.25s ease;
+}
+
+@keyframes chatPop {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.chat-header {
+  background: #0b0b0b;
+  border-bottom: 1px solid #292929;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chat-header-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.chat-avatar {
+  width: 38px;
+  height: 38px;
+  border: 2px solid #d4af37;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+}
+
+.chat-header-info h4 {
+  font-size: 14px;
+  color: white;
+}
+
+.chat-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #aaa;
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4caf50;
+  display: inline-block;
+}
+
+.chat-close {
+  background: transparent;
+  border: none;
+  color: #aaa;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.chat-close:hover {
+  color: #d4af37;
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 18px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.chat-bubble-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.chat-bubble-row.user {
+  justify-content: flex-end;
+}
+
+.bubble-avatar {
+  width: 26px;
+  height: 26px;
+  border: 1px solid #d4af37;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.chat-bubble {
+  max-width: 75%;
+  padding: 11px 14px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.chat-bubble.ai {
+  background: #1f1f1f;
+  color: #eee;
+  border: 1px solid #292929;
+  border-bottom-left-radius: 2px;
+}
+
+.chat-bubble.user {
+  background: #d4af37;
+  color: #111;
+  border-bottom-right-radius: 2px;
+}
+
+.chat-bubble.typing {
+  display: flex;
+  gap: 5px;
+  padding: 14px;
+}
+
+.chat-bubble.typing .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #999;
+  animation: typingBounce 1.2s infinite;
+}
+
+.chat-bubble.typing .dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.chat-bubble.typing .dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typingBounce {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  30% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+.chat-input-row {
+  display: flex;
+  border-top: 1px solid #292929;
+  padding: 12px;
+  gap: 10px;
+}
+
+.chat-input-row input {
+  flex: 1;
+  background: #0b0b0b;
+  border: 1px solid #292929;
+  color: white;
+  padding: 11px 14px;
+  font-size: 13px;
+  outline: none;
+}
+
+.chat-input-row input:focus {
+  border-color: #d4af37;
+}
+
+.chat-send {
+  width: 42px;
+  border: none;
+  background: #d4af37;
+  color: #111;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.chat-send:hover {
+  background: #f6e27a;
+}
+
+@media (max-width: 700px) {
+  .chat-widget {
+    bottom: 15px;
+    right: 15px;
+  }
+
+  .chat-panel {
+    width: calc(100vw - 30px);
+  }
+}
+
 /* RESPONSIVE */
 
 @media (max-width: 1000px) {
