@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./App.css";
+import ChatWidget from "./ChatWidget.jsx";
 
 const properties = [
   {
@@ -366,6 +367,9 @@ function App() {
           <p>© 2026 Real Estate. All Rights Reserved.</p>
         </div>
       </footer>
+
+      {/* CHAT WIDGET */}
+      <ChatWidget />
     </div>
   );
 }
