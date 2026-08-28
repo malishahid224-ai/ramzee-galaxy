@@ -104,7 +104,7 @@ function App() {
         <div className="logo">
           <span>RE</span>
           <div>
-            <h2>REAL ESTATE</h2>
+            <h2>Ramzee-Galaxy</h2>
             <p>PREMIUM PROPERTIES</p>
           </div>
         </div>
