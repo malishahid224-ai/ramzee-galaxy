@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 import ChatWidget from "./ChatWidget.jsx";
+import AdminPanel from "./AdminPanel.jsx";
 
 const properties = [
   {
@@ -81,6 +82,8 @@ function App() {
   const [search, setSearch] = useState("");
   const [dealType, setDealType] = useState("buy"); // hero dropdown: buy | rent
   const [filterType, setFilterType] = useState("all"); // tabs: all | sale | rent
+
+  if (window.location.pathname === "/admin") return <AdminPanel />;
 
   const filteredProperties = properties
     .filter((property) => filterType === "all" || property.type === filterType)
