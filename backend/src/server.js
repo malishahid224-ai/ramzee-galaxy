@@ -80,7 +80,8 @@ function validateProperty(input) {
   const requiredText = ["title", "location", "purpose", "areaUnit"];
   const missing = requiredText.filter((field) => !String(input[field] || "").trim());
   if (missing.length) return `${missing.join(", ")} ${missing.length === 1 ? "is" : "are"} required.`;
-  if (!["sale", "rent"].includes(input.purpose)) return "purpose must be sale or rent.";
+  if (!["sale", "rent", "open-house"].includes(input.purpose)) return "purpose must be sale, rent, or open-house.";
+  if (input.purpose === "open-house" && !String(input.openHouseDate || "").trim()) return "An open-house date is required for open house events.";
   if (!Number.isFinite(Number(input.price)) || Number(input.price) < 0) return "price must be a valid positive number.";
   return null;
 }
@@ -99,6 +100,8 @@ function normalizeProperty(input, previous = {}) {
     areaUnit: String(input.areaUnit).trim(),
     image: String(input.image || "").trim(),
     description: String(input.description || "").trim(),
+    openHouseDate: String(input.openHouseDate || "").trim(),
+    openHouseTime: String(input.openHouseTime || "").trim(),
     status: input.status === "draft" ? "draft" : "published",
     updatedAt: new Date().toISOString(),
   };

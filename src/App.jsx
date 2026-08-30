@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import ChatWidget from "./ChatWidget.jsx";
 import AdminPanel from "./AdminPanel.jsx";
 
-const properties = [
+const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const initialProperties = [
   {
     id: 1,
     title: "Luxury Family House",
@@ -79,14 +80,26 @@ const properties = [
 ];
 
 function App() {
+  const [properties, setProperties] = useState(initialProperties);
+  const [propertiesError, setPropertiesError] = useState("");
   const [search, setSearch] = useState("");
   const [dealType, setDealType] = useState("buy"); // hero dropdown: buy | rent
   const [filterType, setFilterType] = useState("all"); // tabs: all | sale | rent
 
   if (window.location.pathname === "/admin") return <AdminPanel />;
 
+  useEffect(() => {
+    fetch(`${apiUrl}/properties`)
+      .then((response) => {
+        if (!response.ok) throw new Error("Could not load listings.");
+        return response.json();
+      })
+      .then((data) => setProperties(data.properties || []))
+      .catch((error) => setPropertiesError(error.message));
+  }, []);
+
   const filteredProperties = properties
-    .filter((property) => filterType === "all" || property.type === filterType)
+    .filter((property) => filterType === "all" || (property.purpose || property.type) === filterType)
     .filter((property) =>
       `${property.title} ${property.location}`
         .toLowerCase()
@@ -229,17 +242,23 @@ function App() {
           >
             For Rent
           </button>
+          <button
+            className={`tab-btn ${filterType === "open-house" ? "active" : ""}`}
+            onClick={() => setFilterType("open-house")}
+          >
+            Open Houses
+          </button>
         </div>
 
         <div className="property-grid">
-          {filteredProperties.length > 0 ? (
+          {propertiesError ? <p className="no-results">{propertiesError} Start the backend server to view your admin listings.</p> : filteredProperties.length > 0 ? (
             filteredProperties.map((property) => (
-              <div className="property-card" data-type={property.type} key={property.id}>
+              <div className="property-card" data-type={property.purpose || property.type} key={property.id}>
                 <div className="property-image">
-                  <img src={property.image} alt={property.title} />
+                  <img src={property.image || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=80"} alt={property.title} />
 
                   <div className="sale-badge">
-                    {property.type === "rent" ? "FOR RENT" : "FOR SALE"}
+                    {(property.purpose || property.type) === "open-house" ? "OPEN HOUSE" : (property.purpose || property.type) === "rent" ? "FOR RENT" : "FOR SALE"}
                   </div>
 
                   <button className="heart">♡</button>
@@ -250,7 +269,9 @@ function App() {
 
                   <h3>{property.title}</h3>
 
-                  <h2>{property.price}</h2>
+                  <h2>{typeof property.price === "number" ? `${property.currency || "PKR"} ${property.price.toLocaleString()}` : property.price}</h2>
+
+                  {(property.purpose || property.type) === "open-house" && <p className="location">Open house: {property.openHouseDate}{property.openHouseTime ? ` at ${property.openHouseTime}` : ""}</p>}
 
                   <div className="property-details">
                     <span>🛏 {property.beds} Beds</span>
