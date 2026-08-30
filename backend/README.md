@@ -15,7 +15,7 @@ The server starts at `http://localhost:5000`.
 First, call `POST /api/auth/admin/login`:
 
 ```json
-{ "email": "admin@ramzeegalaxy.com", "password": "ChangeMe123!" }
+{ "email": "admin@ramzeegalaxy.com", "password": "RamzeeAdmin#2026!" }
 ```
 
 Use the received token on every admin request:
