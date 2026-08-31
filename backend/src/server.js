@@ -3,21 +3,19 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import jwt from "jsonwebtoken";
+import { MongoClient } from "mongodb";
 import { randomUUID } from "node:crypto";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 
 dotenv.config();
 
 const app = express();
 const port = Number(process.env.PORT || 5000);
 const jwtSecret = process.env.JWT_SECRET || "development-secret-change-me";
-const adminEmail = (process.env.ADMIN_EMAIL || "admin@ramzeegalaxy.com").toLowerCase();
-const adminPassword = process.env.ADMIN_PASSWORD || "RamzeeAdmin#2026!";
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const dataDirectory = path.join(__dirname, "..", "data");
-const propertiesFile = path.join(dataDirectory, "properties.json");
+const adminEmail = (process.env.ADMIN_EMAIL || "admin@abc.com").toLowerCase();
+const adminPassword = process.env.ADMIN_PASSWORD || "admin123";
+const mongoUri = process.env.MONGODB_URI;
+const mongoDatabaseName = process.env.MONGODB_DB || "ticketing";
+let propertiesCollection;
 
 app.use(cors({ origin: process.env.CLIENT_URL || "http://localhost:5173" }));
 app.use(express.json({ limit: "1mb" }));
@@ -42,24 +40,16 @@ const sampleProperties = [
   },
 ];
 
-async function ensureStore() {
-  await mkdir(dataDirectory, { recursive: true });
-  try {
-    await readFile(propertiesFile, "utf8");
-  } catch (error) {
-    if (error.code !== "ENOENT") throw error;
-    await writeFile(propertiesFile, JSON.stringify(sampleProperties, null, 2));
+async function connectDatabase() {
+  if (!mongoUri) throw new Error("MONGODB_URI must be set in .env.");
+  const client = new MongoClient(mongoUri);
+  await client.connect();
+  propertiesCollection = client.db(mongoDatabaseName).collection("properties");
+  await propertiesCollection.createIndex({ id: 1 }, { unique: true });
+
+  if (await propertiesCollection.countDocuments() === 0) {
+    await propertiesCollection.insertMany(sampleProperties);
   }
-}
-
-async function getProperties() {
-  await ensureStore();
-  return JSON.parse(await readFile(propertiesFile, "utf8"));
-}
-
-async function saveProperties(properties) {
-  await ensureStore();
-  await writeFile(propertiesFile, JSON.stringify(properties, null, 2));
 }
 
 function authenticateAdmin(req, res, next) {
@@ -124,55 +114,56 @@ app.post("/api/auth/admin/login", async (req, res) => {
 
 app.get("/api/properties", async (req, res, next) => {
   try {
-    let properties = await getProperties();
     const { purpose, search } = req.query;
-    if (purpose) properties = properties.filter((property) => property.purpose === purpose);
-    properties = properties.filter((property) => property.status === "published");
+    const filter = { status: "published" };
+    if (purpose) filter.purpose = purpose;
     if (search) {
-      const term = String(search).toLowerCase();
-      properties = properties.filter((property) => `${property.title} ${property.location}`.toLowerCase().includes(term));
+      const term = String(search).trim();
+      filter.$or = [
+        { title: { $regex: term, $options: "i" } },
+        { location: { $regex: term, $options: "i" } },
+      ];
     }
+    const properties = await propertiesCollection.find(filter, { projection: { _id: 0 } }).sort({ createdAt: -1 }).toArray();
     res.json({ properties });
   } catch (error) { next(error); }
 });
 
 app.get("/api/admin/properties", authenticateAdmin, async (_req, res, next) => {
-  try { res.json({ properties: await getProperties() }); } catch (error) { next(error); }
+  try {
+    const properties = await propertiesCollection.find({}, { projection: { _id: 0 } }).sort({ createdAt: -1 }).toArray();
+    res.json({ properties });
+  } catch (error) { next(error); }
 });
 
 app.post("/api/admin/properties", authenticateAdmin, async (req, res, next) => {
   try {
     const validationError = validateProperty(req.body);
     if (validationError) return res.status(400).json({ message: validationError });
-    const properties = await getProperties();
     const now = new Date().toISOString();
     const property = { id: randomUUID(), ...normalizeProperty(req.body), createdAt: now, updatedAt: now };
-    properties.unshift(property);
-    await saveProperties(properties);
+    await propertiesCollection.insertOne(property);
     res.status(201).json({ property });
   } catch (error) { next(error); }
 });
 
 app.patch("/api/admin/properties/:id", authenticateAdmin, async (req, res, next) => {
   try {
-    const properties = await getProperties();
-    const index = properties.findIndex((property) => property.id === req.params.id);
-    if (index === -1) return res.status(404).json({ message: "Property not found." });
-    const candidate = { ...properties[index], ...req.body };
+    const existing = await propertiesCollection.findOne({ id: req.params.id }, { projection: { _id: 0 } });
+    if (!existing) return res.status(404).json({ message: "Property not found." });
+    const candidate = { ...existing, ...req.body };
     const validationError = validateProperty(candidate);
     if (validationError) return res.status(400).json({ message: validationError });
-    properties[index] = normalizeProperty(candidate, properties[index]);
-    await saveProperties(properties);
-    res.json({ property: properties[index] });
+    const property = normalizeProperty(candidate, existing);
+    await propertiesCollection.replaceOne({ id: req.params.id }, property);
+    res.json({ property });
   } catch (error) { next(error); }
 });
 
 app.delete("/api/admin/properties/:id", authenticateAdmin, async (req, res, next) => {
   try {
-    const properties = await getProperties();
-    const remaining = properties.filter((property) => property.id !== req.params.id);
-    if (remaining.length === properties.length) return res.status(404).json({ message: "Property not found." });
-    await saveProperties(remaining);
+    const result = await propertiesCollection.deleteOne({ id: req.params.id });
+    if (!result.deletedCount) return res.status(404).json({ message: "Property not found." });
     res.status(204).end();
   } catch (error) { next(error); }
 });
@@ -182,7 +173,7 @@ app.use((error, _req, res, _next) => {
   res.status(500).json({ message: "An unexpected server error occurred." });
 });
 
-ensureStore()
+connectDatabase()
   .then(() => app.listen(port, () => console.log(`API running at http://localhost:${port}`)))
   .catch((error) => {
     console.error("Unable to start API", error);

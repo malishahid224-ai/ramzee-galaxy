@@ -1,10 +1,10 @@
 # Real Estate Admin API
 
-This API lets an administrator manage property listings. It uses a local JSON file for development, which is created automatically at `data/properties.json` when the server first runs.
+This API lets an administrator manage property listings in MongoDB. A sample listing is added automatically when the `properties` collection is empty.
 
 ## Start it
 
-1. Copy `.env.example` to `.env` and change the default secret and admin password.
+1. Copy `.env.example` to `.env`, set `MONGODB_URI` to your MongoDB Atlas connection string, and change the default secret and admin password.
 2. Run `npm install` inside this `backend` folder.
 3. Run `npm run dev`.
 
