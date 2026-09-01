@@ -4,6 +4,7 @@ import ChatWidget from "./ChatWidget.jsx";
 import AdminPanel from "./AdminPanel.jsx";
 
 const apiUrl = import.meta.env.VITE_API_URL || "/api";
+
 const initialProperties = [
   {
     id: 1,
@@ -14,8 +15,15 @@ const initialProperties = [
     beds: 5,
     baths: 4,
     area: "1 Kanal",
+    description:
+      "Stunning contemporary 1 Kanal luxury house featuring high-end architecture, designer fittings, imported marble flooring, dual kitchens, spacious lawn, and dedicated servant quarters.",
     image:
       "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=80",
+    gallery: [
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1600573472550-8090b5e0745e?auto=format&fit=crop&w=900&q=80",
+    ],
   },
   {
     id: 2,
@@ -26,8 +34,14 @@ const initialProperties = [
     beds: 4,
     baths: 4,
     area: "10 Marla",
+    description:
+      "Elegantly designed modern villa located in a prime sector. Offers open-plan living rooms, a rooftop terrace, smartly planned storage spaces, and garage parking for 2 cars.",
     image:
       "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=900&q=80",
+    gallery: [
+      "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=900&q=80",
+    ],
   },
   {
     id: 3,
@@ -38,8 +52,14 @@ const initialProperties = [
     beds: 6,
     baths: 5,
     area: "2 Kanal",
+    description:
+      "Palatial home in the heart of Gulberg. Features custom woodwork, private swimming pool, smart home automation, expansive garden, and basement entertainment hall.",
     image:
       "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=900&q=80",
+    gallery: [
+      "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=80",
+    ],
   },
   {
     id: 4,
@@ -50,8 +70,14 @@ const initialProperties = [
     beds: 2,
     baths: 2,
     area: "5 Marla",
+    description:
+      "Stylish 2-bed apartment in a secure gated building. Close to top universities, shopping malls, and main avenues. Includes dedicated basement parking and 24/7 backup power.",
     image:
       "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=900&q=80",
+    gallery: [
+      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=900&q=80",
+    ],
   },
   {
     id: 5,
@@ -62,8 +88,14 @@ const initialProperties = [
     beds: 4,
     baths: 3,
     area: "10 Marla",
+    description:
+      "Fully furnished residence ready for immediate move-in. Complete with modern appliances, stylish furniture sets, central air conditioning, and a beautiful front lawn.",
     image:
       "https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=900&q=80",
+    gallery: [
+      "https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=900&q=80",
+    ],
   },
   {
     id: 6,
@@ -74,19 +106,55 @@ const initialProperties = [
     beds: 3,
     baths: 3,
     area: "8 Marla",
+    description:
+      "Top-floor luxury penthouse with panoramic city views, private Jacuzzi, open kitchen bar, private elevator access, and premium concierge services.",
     image:
       "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=900&q=80",
+    gallery: [
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=900&q=80",
+    ],
   },
 ];
 
+const defaultRealtorInfo = {
+  name: "Alexander Vance",
+  title: "Principal Realtor & Property Consultant",
+  licenseNo: "RL-94820-PK",
+  phone: "+92 300 1234567",
+  altPhone: "+92 42 35789000",
+  email: "contact@realestatepremium.com",
+  photo:
+    "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=800&q=80",
+  offices: [
+    {
+      city: "Lahore Head Office",
+      address: "Suite 402, Al-Hafeez Heights, Gulberg III, Lahore",
+    },
+    {
+      city: "DHA Branch",
+      address: "Commercial Plaza #14, Sector CCA, DHA Phase 6, Lahore",
+    },
+  ],
+};
+
 function App() {
+  if (window.location.pathname.startsWith("/admin")) {
+    return <AdminPanel />;
+  }
+
   const [properties, setProperties] = useState(initialProperties);
   const [propertiesError, setPropertiesError] = useState("");
   const [search, setSearch] = useState("");
-  const [dealType, setDealType] = useState("buy"); // hero dropdown: buy | rent
-  const [filterType, setFilterType] = useState("all"); // tabs: all | sale | rent
+  const [dealType, setDealType] = useState("buy");
+  const [filterType, setFilterType] = useState("all");
+  const [selectedProperty, setSelectedProperty] = useState(null);
+  const [activeImage, setActiveImage] = useState("");
 
-  if (window.location.pathname === "/admin") return <AdminPanel />;
+  const [realtorInfo, setRealtorInfo] = useState(() => {
+    const saved = localStorage.getItem("realtorInfo");
+    return saved ? JSON.parse(saved) : defaultRealtorInfo;
+  });
 
   useEffect(() => {
     fetch(`${apiUrl}/properties`)
@@ -94,12 +162,24 @@ function App() {
         if (!response.ok) throw new Error("Could not load listings.");
         return response.json();
       })
-      .then((data) => setProperties(data.properties || []))
+      .then((data) => {
+        if (data.properties && data.properties.length > 0) {
+          setProperties(data.properties);
+        }
+      })
       .catch((error) => setPropertiesError(error.message));
+
+    fetch(`${apiUrl}/realtor`)
+      .then((res) => res.ok && res.json())
+      .then((data) => data && setRealtorInfo(data))
+      .catch(() => {});
   }, []);
 
   const filteredProperties = properties
-    .filter((property) => filterType === "all" || (property.purpose || property.type) === filterType)
+    .filter(
+      (property) =>
+        filterType === "all" || (property.purpose || property.type) === filterType
+    )
     .filter((property) =>
       `${property.title} ${property.location}`
         .toLowerCase()
@@ -111,6 +191,18 @@ function App() {
     document
       .getElementById("properties")
       ?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const openModal = (property) => {
+    setSelectedProperty(property);
+    setActiveImage(
+      property.image ||
+        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=80"
+    );
+  };
+
+  const closeModal = () => {
+    setSelectedProperty(null);
   };
 
   return (
@@ -127,13 +219,21 @@ function App() {
 
         <nav>
           <a href="#home">Home</a>
+          <a href="#realtor">Realtor Profile</a>
           <a href="#properties">Properties</a>
           <a href="#about">About</a>
           <a href="#services">Services</a>
           <a href="#contact">Contact</a>
         </nav>
 
-        <button className="login-btn">Login</button>
+        <button
+          className="login-btn"
+          onClick={() => {
+            window.location.href = "/admin";
+          }}
+        >
+          Admin Login
+        </button>
       </header>
 
       {/* HERO */}
@@ -186,6 +286,67 @@ function App() {
             </select>
 
             <button onClick={handleHeroSearch}>Search Property</button>
+          </div>
+        </div>
+      </section>
+
+      {/* REALTOR PROFILE SECTION */}
+      <section className="realtor-section" id="realtor">
+        <div className="section-heading">
+          <p>AUTHORIZED BROKER</p>
+          <h2>Meet Your Lead Realtor</h2>
+        </div>
+
+        <div className="realtor-card">
+          <div className="realtor-photo">
+            <img src={realtorInfo.photo} alt={realtorInfo.name} />
+            <div className="license-badge">
+              <span>LICENSED AGENT</span>
+              <strong>{realtorInfo.licenseNo}</strong>
+            </div>
+          </div>
+
+          <div className="realtor-details">
+            <h2>{realtorInfo.name}</h2>
+            <p className="realtor-title">{realtorInfo.title}</p>
+
+            <div className="realtor-contact-grid">
+              <div className="contact-item">
+                <span className="icon">📞</span>
+                <div>
+                  <small>Phone & WhatsApp</small>
+                  <p>{realtorInfo.phone}</p>
+                </div>
+              </div>
+
+              <div className="contact-item">
+                <span className="icon">☎️</span>
+                <div>
+                  <small>Office Telephone</small>
+                  <p>{realtorInfo.altPhone}</p>
+                </div>
+              </div>
+
+              <div className="contact-item">
+                <span className="icon">✉️</span>
+                <div>
+                  <small>Email Address</small>
+                  <p>{realtorInfo.email}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="office-addresses">
+              <h3>Office Locations</h3>
+              <div className="office-list">
+                {realtorInfo.offices.map((office, idx) => (
+                  <div className="office-card" key={idx}>
+                    <strong>📍 {office.city}</strong>
+                    <p>{office.address}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -251,45 +412,182 @@ function App() {
         </div>
 
         <div className="property-grid">
-          {propertiesError ? <p className="no-results">{propertiesError} Start the backend server to view your admin listings.</p> : filteredProperties.length > 0 ? (
-            filteredProperties.map((property) => (
-              <div className="property-card" data-type={property.purpose || property.type} key={property.id}>
-                <div className="property-image">
-                  <img src={property.image || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=80"} alt={property.title} />
+          {propertiesError ? (
+            <p className="no-results">
+              {propertiesError} Showing local offline listings.
+            </p>
+          ) : null}
 
-                  <div className="sale-badge">
-                    {(property.purpose || property.type) === "open-house" ? "OPEN HOUSE" : (property.purpose || property.type) === "rent" ? "FOR RENT" : "FOR SALE"}
+          {filteredProperties.length > 0 ? (
+            filteredProperties.map((property) => {
+              const purpose = property.purpose || property.type;
+              return (
+                <div
+                  className="property-card"
+                  data-type={purpose}
+                  key={property.id}
+                >
+                  <div className="property-image">
+                    <img
+                      src={
+                        property.image ||
+                        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=80"
+                      }
+                      alt={property.title}
+                    />
+
+                    <div className="sale-badge">
+                      {purpose === "open-house"
+                        ? "OPEN HOUSE"
+                        : purpose === "rent"
+                        ? "FOR RENT"
+                        : "FOR SALE"}
+                    </div>
+
+                    <button className="heart">♡</button>
                   </div>
 
-                  <button className="heart">♡</button>
-                </div>
+                  <div className="property-info">
+                    <p className="location">📍 {property.location}</p>
 
-                <div className="property-info">
-                  <p className="location">📍 {property.location}</p>
+                    <h3>{property.title}</h3>
 
-                  <h3>{property.title}</h3>
+                    <h2>
+                      {typeof property.price === "number"
+                        ? `${property.currency || "PKR"} ${property.price.toLocaleString()}`
+                        : property.price}
+                    </h2>
 
-                  <h2>{typeof property.price === "number" ? `${property.currency || "PKR"} ${property.price.toLocaleString()}` : property.price}</h2>
+                    {purpose === "open-house" && (
+                      <p className="location">
+                        Open house: {property.openHouseDate}
+                        {property.openHouseTime ? ` at ${property.openHouseTime}` : ""}
+                      </p>
+                    )}
 
-                  {(property.purpose || property.type) === "open-house" && <p className="location">Open house: {property.openHouseDate}{property.openHouseTime ? ` at ${property.openHouseTime}` : ""}</p>}
+                    <div className="property-details">
+                      <span>🛏 {property.beds} Beds</span>
+                      <span>🚿 {property.baths} Baths</span>
+                      <span>📐 {property.area}</span>
+                    </div>
 
-                  <div className="property-details">
-                    <span>🛏 {property.beds} Beds</span>
-                    <span>🚿 {property.baths} Baths</span>
-                    <span>📐 {property.area}</span>
+                    <button
+                      className="details-btn"
+                      onClick={() => openModal(property)}
+                    >
+                      View Property
+                    </button>
                   </div>
-
-                  <button className="details-btn">
-                    View Property
-                  </button>
                 </div>
-              </div>
-            ))
+              );
+            })
           ) : (
             <p className="no-results">No properties found.</p>
           )}
         </div>
       </section>
+
+      {/* PROPERTY DETAILS MODAL POPUP */}
+      {selectedProperty && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div
+            className="modal-container"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button className="modal-close" onClick={closeModal}>
+              ✕
+            </button>
+
+            <div className="modal-content">
+              <div className="modal-gallery">
+                <div className="main-image">
+                  <img src={activeImage} alt={selectedProperty.title} />
+                </div>
+                <div className="thumbnail-list">
+                  {(
+                    selectedProperty.gallery || [
+                      selectedProperty.image ||
+                        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=80",
+                    ]
+                  ).map((img, index) => (
+                    <img
+                      key={index}
+                      src={img}
+                      alt={`Thumbnail ${index + 1}`}
+                      className={activeImage === img ? "active" : ""}
+                      onClick={() => setActiveImage(img)}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <div className="modal-info">
+                <span className="modal-badge">
+                  {(selectedProperty.purpose || selectedProperty.type) ===
+                  "open-house"
+                    ? "OPEN HOUSE"
+                    : (selectedProperty.purpose || selectedProperty.type) ===
+                      "rent"
+                    ? "FOR RENT"
+                    : "FOR SALE"}
+                </span>
+
+                <h2>{selectedProperty.title}</h2>
+                <p className="modal-location">
+                  📍 {selectedProperty.location}
+                </p>
+
+                <h3 className="modal-price">
+                  {typeof selectedProperty.price === "number"
+                    ? `${selectedProperty.currency || "PKR"} ${selectedProperty.price.toLocaleString()}`
+                    : selectedProperty.price}
+                </h3>
+
+                <div className="modal-specs">
+                  <div>
+                    <strong>{selectedProperty.beds}</strong>
+                    <span>Bedrooms</span>
+                  </div>
+                  <div>
+                    <strong>{selectedProperty.baths}</strong>
+                    <span>Bathrooms</span>
+                  </div>
+                  <div>
+                    <strong>{selectedProperty.area}</strong>
+                    <span>Total Area</span>
+                  </div>
+                </div>
+
+                <div className="modal-description">
+                  <h4>Property Description</h4>
+                  <p>
+                    {selectedProperty.description ||
+                      "No detailed description available for this listing."}
+                  </p>
+                </div>
+
+                <div className="modal-agent">
+                  <small>Contact Listing Agent:</small>
+                  <p>
+                    <strong>{realtorInfo.name}</strong> ({realtorInfo.phone})
+                  </p>
+                </div>
+
+                <button
+                  className="gold-btn modal-action"
+                  onClick={() =>
+                    alert(
+                      `Inquiry sent for ${selectedProperty.title}! Agent ${realtorInfo.name} will contact you shortly.`
+                    )
+                  }
+                >
+                  Schedule a Viewing
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ABOUT */}
       <section className="about" id="about">
