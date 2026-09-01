@@ -15,7 +15,9 @@ const adminEmail = (process.env.ADMIN_EMAIL || "admin@abc.com").toLowerCase();
 const adminPassword = process.env.ADMIN_PASSWORD || "admin123";
 const mongoUri = process.env.MONGODB_URI;
 const mongoDatabaseName = process.env.MONGODB_DB || "ticketing";
+
 let propertiesCollection;
+let realtorCollection;
 
 app.use(cors({ origin: process.env.CLIENT_URL || "http://localhost:5173" }));
 app.use(express.json({ limit: "1mb" }));
@@ -40,15 +42,40 @@ const sampleProperties = [
   },
 ];
 
+const defaultRealtor = {
+  id: "default-realtor",
+  name: "Alexander Vance",
+  title: "Principal Realtor & Property Consultant",
+  licenseNo: "RL-94820-PK",
+  phone: "+92 300 1234567",
+  altPhone: "+92 42 35789000",
+  email: "contact@realestatepremium.com",
+  photo: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=800&q=80",
+  offices: [
+    { city: "Lahore Head Office", address: "Suite 402, Al-Hafeez Heights, Gulberg III, Lahore" },
+    { city: "DHA Branch", address: "Commercial Plaza #14, Sector CCA, DHA Phase 6, Lahore" },
+  ],
+  updatedAt: new Date().toISOString(),
+};
+
 async function connectDatabase() {
   if (!mongoUri) throw new Error("MONGODB_URI must be set in .env.");
   const client = new MongoClient(mongoUri);
   await client.connect();
-  propertiesCollection = client.db(mongoDatabaseName).collection("properties");
-  await propertiesCollection.createIndex({ id: 1 }, { unique: true });
+  const db = client.db(mongoDatabaseName);
 
-  if (await propertiesCollection.countDocuments() === 0) {
+  propertiesCollection = db.collection("properties");
+  realtorCollection = db.collection("realtor");
+
+  await propertiesCollection.createIndex({ id: 1 }, { unique: true });
+  await realtorCollection.createIndex({ id: 1 }, { unique: true });
+
+  if ((await propertiesCollection.countDocuments()) === 0) {
     await propertiesCollection.insertMany(sampleProperties);
+  }
+
+  if ((await realtorCollection.countDocuments()) === 0) {
+    await realtorCollection.insertOne(defaultRealtor);
   }
 }
 
@@ -112,6 +139,8 @@ app.post("/api/auth/admin/login", async (req, res) => {
   res.json({ token, admin: { email: adminEmail, role: "admin" } });
 });
 
+/* PROPERTIES ROUTES */
+
 app.get("/api/properties", async (req, res, next) => {
   try {
     const { purpose, search } = req.query;
@@ -124,16 +153,26 @@ app.get("/api/properties", async (req, res, next) => {
         { location: { $regex: term, $options: "i" } },
       ];
     }
-    const properties = await propertiesCollection.find(filter, { projection: { _id: 0 } }).sort({ createdAt: -1 }).toArray();
+    const properties = await propertiesCollection
+      .find(filter, { projection: { _id: 0 } })
+      .sort({ createdAt: -1 })
+      .toArray();
     res.json({ properties });
-  } catch (error) { next(error); }
+  } catch (error) {
+    next(error);
+  }
 });
 
 app.get("/api/admin/properties", authenticateAdmin, async (_req, res, next) => {
   try {
-    const properties = await propertiesCollection.find({}, { projection: { _id: 0 } }).sort({ createdAt: -1 }).toArray();
+    const properties = await propertiesCollection
+      .find({}, { projection: { _id: 0 } })
+      .sort({ createdAt: -1 })
+      .toArray();
     res.json({ properties });
-  } catch (error) { next(error); }
+  } catch (error) {
+    next(error);
+  }
 });
 
 app.post("/api/admin/properties", authenticateAdmin, async (req, res, next) => {
@@ -144,7 +183,9 @@ app.post("/api/admin/properties", authenticateAdmin, async (req, res, next) => {
     const property = { id: randomUUID(), ...normalizeProperty(req.body), createdAt: now, updatedAt: now };
     await propertiesCollection.insertOne(property);
     res.status(201).json({ property });
-  } catch (error) { next(error); }
+  } catch (error) {
+    next(error);
+  }
 });
 
 app.patch("/api/admin/properties/:id", authenticateAdmin, async (req, res, next) => {
@@ -157,7 +198,9 @@ app.patch("/api/admin/properties/:id", authenticateAdmin, async (req, res, next)
     const property = normalizeProperty(candidate, existing);
     await propertiesCollection.replaceOne({ id: req.params.id }, property);
     res.json({ property });
-  } catch (error) { next(error); }
+  } catch (error) {
+    next(error);
+  }
 });
 
 app.delete("/api/admin/properties/:id", authenticateAdmin, async (req, res, next) => {
@@ -165,7 +208,48 @@ app.delete("/api/admin/properties/:id", authenticateAdmin, async (req, res, next
     const result = await propertiesCollection.deleteOne({ id: req.params.id });
     if (!result.deletedCount) return res.status(404).json({ message: "Property not found." });
     res.status(204).end();
-  } catch (error) { next(error); }
+  } catch (error) {
+    next(error);
+  }
+});
+
+/* REALTOR ROUTES */
+
+app.get("/api/realtor", async (_req, res, next) => {
+  try {
+    const realtor = await realtorCollection.findOne({}, { projection: { _id: 0 } });
+    res.json(realtor || defaultRealtor);
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.put("/api/admin/realtor", authenticateAdmin, async (req, res, next) => {
+  try {
+    const existing = (await realtorCollection.findOne({}, { projection: { _id: 0 } })) || defaultRealtor;
+    const updated = {
+      ...existing,
+      name: String(req.body.name || existing.name).trim(),
+      title: String(req.body.title || existing.title).trim(),
+      licenseNo: String(req.body.licenseNo || existing.licenseNo).trim(),
+      phone: String(req.body.phone || existing.phone).trim(),
+      altPhone: String(req.body.altPhone || existing.altPhone).trim(),
+      email: String(req.body.email || existing.email).trim(),
+      photo: String(req.body.photo || existing.photo).trim(),
+      offices: Array.isArray(req.body.offices) ? req.body.offices : existing.offices,
+      updatedAt: new Date().toISOString(),
+    };
+
+    await realtorCollection.updateOne(
+      { id: existing.id },
+      { $set: updated },
+      { upsert: true }
+    );
+
+    res.json({ realtor: updated });
+  } catch (error) {
+    next(error);
+  }
 });
 
 app.use((error, _req, res, _next) => {
