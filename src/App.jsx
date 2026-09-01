@@ -3,7 +3,7 @@ import "./App.css";
 import ChatWidget from "./ChatWidget.jsx";
 import AdminPanel from "./AdminPanel.jsx";
 
-const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const apiUrl = import.meta.env.VITE_API_URL || "/api";
 const initialProperties = [
   {
     id: 1,

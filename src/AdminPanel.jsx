@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./AdminPanel.css";
 
-const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const apiUrl = import.meta.env.VITE_API_URL || "/api";
 const emptyProperty = {
   title: "", location: "", price: "", purpose: "sale", areaUnit: "marla",
   beds: "", baths: "", area: "", image: "", description: "", openHouseDate: "", openHouseTime: "", status: "published",
