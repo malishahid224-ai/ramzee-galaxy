@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import "./ChatWidget.css";
 
 // Simple keyword-based reply engine so the widget is useful out of the box.
 // Swap `getAgentReply` for a real API call (see comment at the bottom) when

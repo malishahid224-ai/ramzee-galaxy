@@ -823,6 +823,74 @@ select {
   width: 100%;
 }
 
+/* CONTACT INFO MODAL */
+
+.contact-modal {
+  background: #141414;
+  border: 1px solid #333;
+  width: 100%;
+  max-width: 420px;
+  position: relative;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+  border-radius: 4px;
+  padding: 40px 35px;
+}
+
+.contact-modal h2 {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.contact-modal-sub {
+  color: #999;
+  font-size: 13px;
+  margin-bottom: 25px;
+}
+
+.contact-modal-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #1a1a1a;
+  border: 1px solid #292929;
+  padding: 16px;
+  margin-bottom: 14px;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.contact-modal-item:last-child {
+  margin-bottom: 0;
+}
+
+.contact-modal-item:hover {
+  border-color: #d4af37;
+  background: #201c10;
+}
+
+.contact-modal-item .icon {
+  font-size: 22px;
+}
+
+.contact-modal-item small {
+  color: #888;
+  font-size: 11px;
+  display: block;
+  margin-bottom: 3px;
+}
+
+.contact-modal-item p {
+  color: #eee;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+@media (max-width: 480px) {
+  .contact-modal {
+    padding: 30px 22px;
+  }
+}
+
 /* ABOUT */
 
 .about {

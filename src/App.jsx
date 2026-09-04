@@ -151,6 +151,7 @@ function App() {
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [activeImage, setActiveImage] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [contactModalOpen, setContactModalOpen] = useState(false);
 
   const [realtorInfo, setRealtorInfo] = useState(() => {
     const saved = localStorage.getItem("realtorInfo");
@@ -225,24 +226,7 @@ function App() {
           <a href="#about" onClick={() => setMenuOpen(false)}>About</a>
           <a href="#services" onClick={() => setMenuOpen(false)}>Services</a>
           <a href="#contact" onClick={() => setMenuOpen(false)}>Contact</a>
-          <button
-            className="login-btn nav-login-btn"
-            onClick={() => {
-              window.location.href = "/admin";
-            }}
-          >
-            Admin Login
-          </button>
         </nav>
-
-        <button
-          className="login-btn desktop-login-btn"
-          onClick={() => {
-            window.location.href = "/admin";
-          }}
-        >
-          Admin Login
-        </button>
 
         <button
           className={`nav-toggle ${menuOpen ? "active" : ""}`}
@@ -698,8 +682,55 @@ function App() {
           <h2>Let's Make Your Dream Home a Reality.</h2>
         </div>
 
-        <button className="contact-btn">Contact Us</button>
+        <button className="contact-btn" onClick={() => setContactModalOpen(true)}>
+          Contact Us
+        </button>
       </section>
+
+      {/* CONTACT INFO POPUP */}
+      {contactModalOpen && (
+        <div
+          className="modal-overlay"
+          onClick={() => setContactModalOpen(false)}
+        >
+          <div
+            className="contact-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="modal-close"
+              onClick={() => setContactModalOpen(false)}
+              aria-label="Close"
+            >
+              ✕
+            </button>
+
+            <h2>Get In Touch</h2>
+            <p className="contact-modal-sub">
+              Reach out to {realtorInfo.name} directly.
+            </p>
+
+            <a className="contact-modal-item" href={`tel:${realtorInfo.phone}`}>
+              <span className="icon">📞</span>
+              <div>
+                <small>Phone</small>
+                <p>{realtorInfo.phone}</p>
+              </div>
+            </a>
+
+            <a
+              className="contact-modal-item"
+              href={`mailto:${realtorInfo.email}`}
+            >
+              <span className="icon">✉️</span>
+              <div>
+                <small>Email</small>
+                <p>{realtorInfo.email}</p>
+              </div>
+            </a>
+          </div>
+        </div>
+      )}
 
       {/* FOOTER */}
       <footer>
