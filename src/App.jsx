@@ -150,6 +150,7 @@ function App() {
   const [filterType, setFilterType] = useState("all");
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [activeImage, setActiveImage] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const [realtorInfo, setRealtorInfo] = useState(() => {
     const saved = localStorage.getItem("realtorInfo");
@@ -217,24 +218,46 @@ function App() {
           </div>
         </div>
 
-        <nav>
-          <a href="#home">Home</a>
-          <a href="#realtor">Realtor Profile</a>
-          <a href="#properties">Properties</a>
-          <a href="#about">About</a>
-          <a href="#services">Services</a>
-          <a href="#contact">Contact</a>
+        <nav className={menuOpen ? "open" : ""}>
+          <a href="#home" onClick={() => setMenuOpen(false)}>Home</a>
+          <a href="#realtor" onClick={() => setMenuOpen(false)}>Realtor Profile</a>
+          <a href="#properties" onClick={() => setMenuOpen(false)}>Properties</a>
+          <a href="#about" onClick={() => setMenuOpen(false)}>About</a>
+          <a href="#services" onClick={() => setMenuOpen(false)}>Services</a>
+          <a href="#contact" onClick={() => setMenuOpen(false)}>Contact</a>
+          <button
+            className="login-btn nav-login-btn"
+            onClick={() => {
+              window.location.href = "/admin";
+            }}
+          >
+            Admin Login
+          </button>
         </nav>
 
         <button
-          className="login-btn"
+          className="login-btn desktop-login-btn"
           onClick={() => {
             window.location.href = "/admin";
           }}
         >
           Admin Login
         </button>
+
+        <button
+          className={`nav-toggle ${menuOpen ? "active" : ""}`}
+          aria-label="Toggle menu"
+          onClick={() => setMenuOpen((open) => !open)}
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
       </header>
+
+      {menuOpen && (
+        <div className="nav-backdrop" onClick={() => setMenuOpen(false)}></div>
+      )}
 
       {/* HERO */}
       <section className="hero" id="home">
