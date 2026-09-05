@@ -16,8 +16,59 @@ const adminPassword = process.env.ADMIN_PASSWORD || "admin123";
 const mongoUri = process.env.MONGODB_URI;
 const mongoDatabaseName = process.env.MONGODB_DB || "ticketing";
 
+const defaultAbout = {
+  id: "default-about",
+  image: "https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=1000&q=80",
+  tag: "ABOUT OUR COMPANY",
+  heading: "Building Dreams,",
+  headingHighlight: "Creating Futures",
+  text: "We help families, investors and businesses find exceptional properties. Our experienced team provides trusted real-estate solutions from property search to final purchase.",
+  points: ["Verified Properties", "Professional Agents", "Trusted Service"],
+  modalParagraphs: [
+    "Ramzee-Galaxy was founded on a simple belief: finding a home should feel exciting, not overwhelming. For over 15 years, we've guided families, investors, and businesses across Lahore through every stage of the real-estate journey — from the first property search to the final signature.",
+    "Our team of licensed, experienced agents combines local market knowledge with a genuinely personal approach. Every listing on this site is verified, every transaction is handled with full transparency, and every client gets direct access to a dedicated consultant — not a call center.",
+    "Whether you're buying your first home, renting a place in the city, or selling a property at the right price, our mission is the same: make it simple, make it trustworthy, and make it feel like home.",
+  ],
+  updatedAt: new Date().toISOString(),
+};
+
+const defaultSiteContent = {
+  id: "default-site-content",
+  brandName: "Ramzee-Galaxy",
+  brandTagline: "PREMIUM PROPERTIES",
+  heroSmallTitle: "WELCOME TO YOUR FUTURE",
+  heroHeading: "Find Your",
+  heroHeadingHighlight: "Dream Home",
+  heroText: "Discover exceptional properties in the most desirable locations. Your perfect home is waiting for you.",
+  realtorSectionTag: "AUTHORIZED BROKER",
+  realtorSectionHeading: "Meet Your Lead Realtor",
+  stats: [
+    { value: "500+", label: "Properties" },
+    { value: "250+", label: "Happy Clients" },
+    { value: "50+", label: "Expert Agents" },
+    { value: "15+", label: "Years Experience" },
+  ],
+  propertiesSectionTag: "EXPLORE OUR COLLECTION",
+  propertiesSectionHeading: "Featured Properties",
+  propertiesSectionSubtitle: "Discover carefully selected properties designed for modern living.",
+  servicesSectionTag: "WHAT WE OFFER",
+  servicesSectionHeading: "Our Services",
+  services: [
+    { icon: "🏠", title: "Buy Property", description: "Find your ideal home from our collection of premium properties." },
+    { icon: "🔑", title: "Rent Property", description: "Explore quality rental properties in prime locations." },
+    { icon: "💰", title: "Sell Property", description: "Get professional assistance to sell your property at the right price." },
+  ],
+  contactSectionTag: "READY TO FIND YOUR HOME?",
+  contactSectionHeading: "Let's Make Your Dream Home a Reality.",
+  footerTagline: "Premium Properties & Real Estate Solutions",
+  footerCopyright: "© 2026 Real Estate. All Rights Reserved.",
+  updatedAt: new Date().toISOString(),
+};
+
 let propertiesCollection;
 let realtorCollection;
+let aboutCollection;
+let siteContentCollection;
 
 app.use(cors({ origin: process.env.CLIENT_URL || "http://localhost:5173" }));
 app.use(express.json({ limit: "25mb" }));
@@ -66,9 +117,13 @@ async function connectDatabase() {
 
   propertiesCollection = db.collection("properties");
   realtorCollection = db.collection("realtor");
+  aboutCollection = db.collection("about");
+  siteContentCollection = db.collection("siteContent");
 
   await propertiesCollection.createIndex({ id: 1 }, { unique: true });
   await realtorCollection.createIndex({ id: 1 }, { unique: true });
+  await aboutCollection.createIndex({ id: 1 }, { unique: true });
+  await siteContentCollection.createIndex({ id: 1 }, { unique: true });
 
   if ((await propertiesCollection.countDocuments()) === 0) {
     await propertiesCollection.insertMany(sampleProperties);
@@ -76,6 +131,14 @@ async function connectDatabase() {
 
   if ((await realtorCollection.countDocuments()) === 0) {
     await realtorCollection.insertOne(defaultRealtor);
+  }
+
+  if ((await aboutCollection.countDocuments()) === 0) {
+    await aboutCollection.insertOne(defaultAbout);
+  }
+
+  if ((await siteContentCollection.countDocuments()) === 0) {
+    await siteContentCollection.insertOne(defaultSiteContent);
   }
 }
 
@@ -250,6 +313,101 @@ app.put("/api/admin/realtor", authenticateAdmin, async (req, res, next) => {
     );
 
     res.json({ realtor: updated });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/* ABOUT SECTION ROUTES */
+
+app.get("/api/about", async (_req, res, next) => {
+  try {
+    const about = await aboutCollection.findOne({}, { projection: { _id: 0 } });
+    res.json(about || defaultAbout);
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.put("/api/admin/about", authenticateAdmin, async (req, res, next) => {
+  try {
+    const existing = (await aboutCollection.findOne({}, { projection: { _id: 0 } })) || defaultAbout;
+    const updated = {
+      ...existing,
+      image: String(req.body.image || existing.image).trim(),
+      tag: String(req.body.tag || existing.tag).trim(),
+      heading: String(req.body.heading || existing.heading).trim(),
+      headingHighlight: String(req.body.headingHighlight || existing.headingHighlight).trim(),
+      text: String(req.body.text || existing.text).trim(),
+      points: Array.isArray(req.body.points)
+        ? req.body.points.map((point) => String(point).trim()).filter(Boolean)
+        : existing.points,
+      modalParagraphs: Array.isArray(req.body.modalParagraphs)
+        ? req.body.modalParagraphs.map((paragraph) => String(paragraph).trim()).filter(Boolean)
+        : existing.modalParagraphs,
+      updatedAt: new Date().toISOString(),
+    };
+
+    await aboutCollection.updateOne(
+      { id: existing.id },
+      { $set: updated },
+      { upsert: true }
+    );
+
+    res.json({ about: updated });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/* SITE CONTENT ROUTES */
+
+app.get("/api/site-content", async (_req, res, next) => {
+  try {
+    const content = await siteContentCollection.findOne({}, { projection: { _id: 0 } });
+    res.json(content || defaultSiteContent);
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.put("/api/admin/site-content", authenticateAdmin, async (req, res, next) => {
+  try {
+    const existing = (await siteContentCollection.findOne({}, { projection: { _id: 0 } })) || defaultSiteContent;
+    const textField = (key) => String(req.body[key] ?? existing[key]).trim();
+    const arrayField = (key) => (Array.isArray(req.body[key]) ? req.body[key] : existing[key]);
+
+    const updated = {
+      ...existing,
+      brandName: textField("brandName"),
+      brandTagline: textField("brandTagline"),
+      heroSmallTitle: textField("heroSmallTitle"),
+      heroHeading: textField("heroHeading"),
+      heroHeadingHighlight: textField("heroHeadingHighlight"),
+      heroText: textField("heroText"),
+      realtorSectionTag: textField("realtorSectionTag"),
+      realtorSectionHeading: textField("realtorSectionHeading"),
+      stats: arrayField("stats"),
+      propertiesSectionTag: textField("propertiesSectionTag"),
+      propertiesSectionHeading: textField("propertiesSectionHeading"),
+      propertiesSectionSubtitle: textField("propertiesSectionSubtitle"),
+      servicesSectionTag: textField("servicesSectionTag"),
+      servicesSectionHeading: textField("servicesSectionHeading"),
+      services: arrayField("services"),
+      contactSectionTag: textField("contactSectionTag"),
+      contactSectionHeading: textField("contactSectionHeading"),
+      footerTagline: textField("footerTagline"),
+      footerCopyright: textField("footerCopyright"),
+      updatedAt: new Date().toISOString(),
+    };
+
+    await siteContentCollection.updateOne(
+      { id: existing.id },
+      { $set: updated },
+      { upsert: true }
+    );
+
+    res.json({ siteContent: updated });
   } catch (error) {
     next(error);
   }

@@ -117,6 +117,22 @@ const initialProperties = [
   },
 ];
 
+const defaultAboutInfo = {
+  image:
+    "https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=1000&q=80",
+  tag: "ABOUT OUR COMPANY",
+  heading: "Building Dreams,",
+  headingHighlight: "Creating Futures",
+  text: "We help families, investors and businesses find exceptional properties. Our experienced team provides trusted real-estate solutions from property search to final purchase.",
+  points: ["Verified Properties", "Professional Agents", "Trusted Service"],
+  modalParagraphs: [
+    "Ramzee-Galaxy was founded on a simple belief: finding a home should feel exciting, not overwhelming. For over 15 years, we've guided families, investors, and businesses across Lahore through every stage of the real-estate journey — from the first property search to the final signature.",
+    "Our team of licensed, experienced agents combines local market knowledge with a genuinely personal approach. Every listing on this site is verified, every transaction is handled with full transparency, and every client gets direct access to a dedicated consultant — not a call center.",
+    "Whether you're buying your first home, renting a place in the city, or selling a property at the right price, our mission is the same: make it simple, make it trustworthy, and make it feel like home.",
+  ],
+};
+
+
 const defaultRealtorInfo = {
   name: "Alexander Vance",
   title: "Principal Realtor & Property Consultant",
@@ -136,6 +152,39 @@ const defaultRealtorInfo = {
       address: "Commercial Plaza #14, Sector CCA, DHA Phase 6, Lahore",
     },
   ],
+};
+
+const defaultSiteContent = {
+  brandName: "Ramzee-Galaxy",
+  brandTagline: "PREMIUM PROPERTIES",
+  heroSmallTitle: "WELCOME TO YOUR FUTURE",
+  heroHeading: "Find Your",
+  heroHeadingHighlight: "Dream Home",
+  heroText:
+    "Discover exceptional properties in the most desirable locations. Your perfect home is waiting for you.",
+  realtorSectionTag: "AUTHORIZED BROKER",
+  realtorSectionHeading: "Meet Your Lead Realtor",
+  stats: [
+    { value: "500+", label: "Properties" },
+    { value: "250+", label: "Happy Clients" },
+    { value: "50+", label: "Expert Agents" },
+    { value: "15+", label: "Years Experience" },
+  ],
+  propertiesSectionTag: "EXPLORE OUR COLLECTION",
+  propertiesSectionHeading: "Featured Properties",
+  propertiesSectionSubtitle:
+    "Discover carefully selected properties designed for modern living.",
+  servicesSectionTag: "WHAT WE OFFER",
+  servicesSectionHeading: "Our Services",
+  services: [
+    { icon: "🏠", title: "Buy Property", description: "Find your ideal home from our collection of premium properties." },
+    { icon: "🔑", title: "Rent Property", description: "Explore quality rental properties in prime locations." },
+    { icon: "💰", title: "Sell Property", description: "Get professional assistance to sell your property at the right price." },
+  ],
+  contactSectionTag: "READY TO FIND YOUR HOME?",
+  contactSectionHeading: "Let's Make Your Dream Home a Reality.",
+  footerTagline: "Premium Properties & Real Estate Solutions",
+  footerCopyright: "© 2026 Real Estate. All Rights Reserved.",
 };
 
 function App() {
@@ -159,6 +208,16 @@ function App() {
     return saved ? JSON.parse(saved) : defaultRealtorInfo;
   });
 
+  const [aboutInfo, setAboutInfo] = useState(() => {
+    const saved = localStorage.getItem("aboutInfo");
+    return saved ? JSON.parse(saved) : defaultAboutInfo;
+  });
+
+  const [siteContent, setSiteContent] = useState(() => {
+    const saved = localStorage.getItem("siteContent");
+    return saved ? JSON.parse(saved) : defaultSiteContent;
+  });
+
   useEffect(() => {
     fetch(`${apiUrl}/properties`)
       .then((response) => {
@@ -175,6 +234,16 @@ function App() {
     fetch(`${apiUrl}/realtor`)
       .then((res) => res.ok && res.json())
       .then((data) => data && setRealtorInfo(data))
+      .catch(() => {});
+
+    fetch(`${apiUrl}/about`)
+      .then((res) => res.ok && res.json())
+      .then((data) => data && setAboutInfo(data))
+      .catch(() => {});
+
+    fetch(`${apiUrl}/site-content`)
+      .then((res) => res.ok && res.json())
+      .then((data) => data && setSiteContent(data))
       .catch(() => {});
   }, []);
 
@@ -222,8 +291,8 @@ function App() {
         <div className="logo">
           <span>RE</span>
           <div>
-            <h2>Ramzee-Galaxy</h2>
-            <p>PREMIUM PROPERTIES</p>
+            <h2>{siteContent.brandName}</h2>
+            <p>{siteContent.brandTagline}</p>
           </div>
         </div>
 
@@ -271,17 +340,14 @@ function App() {
         <div className="hero-overlay"></div>
 
         <div className="hero-content">
-          <p className="small-title">WELCOME TO YOUR FUTURE</p>
+          <p className="small-title">{siteContent.heroSmallTitle}</p>
 
           <h1>
-            Find Your
-            <span> Dream Home</span>
+            {siteContent.heroHeading}
+            <span> {siteContent.heroHeadingHighlight}</span>
           </h1>
 
-          <p className="hero-text">
-            Discover exceptional properties in the most desirable locations.
-            Your perfect home is waiting for you.
-          </p>
+          <p className="hero-text">{siteContent.heroText}</p>
 
           {/* SEARCH BOX */}
           <div className="search-box">
@@ -308,8 +374,8 @@ function App() {
       {/* REALTOR PROFILE SECTION */}
       <section className="realtor-section" id="realtor">
         <div className="section-heading">
-          <p>AUTHORIZED BROKER</p>
-          <h2>Meet Your Lead Realtor</h2>
+          <p>{siteContent.realtorSectionTag}</p>
+          <h2>{siteContent.realtorSectionHeading}</h2>
         </div>
 
         <div className="realtor-card">
@@ -368,35 +434,20 @@ function App() {
 
       {/* STATS */}
       <section className="stats">
-        <div>
-          <h2>500+</h2>
-          <p>Properties</p>
-        </div>
-
-        <div>
-          <h2>250+</h2>
-          <p>Happy Clients</p>
-        </div>
-
-        <div>
-          <h2>50+</h2>
-          <p>Expert Agents</p>
-        </div>
-
-        <div>
-          <h2>15+</h2>
-          <p>Years Experience</p>
-        </div>
+        {siteContent.stats.map((stat, idx) => (
+          <div key={idx}>
+            <h2>{stat.value}</h2>
+            <p>{stat.label}</p>
+          </div>
+        ))}
       </section>
 
       {/* PROPERTIES */}
       <section className="properties-section" id="properties">
         <div className="section-heading">
-          <p>EXPLORE OUR COLLECTION</p>
-          <h2>Featured Properties</h2>
-          <span>
-            Discover carefully selected properties designed for modern living.
-          </span>
+          <p>{siteContent.propertiesSectionTag}</p>
+          <h2>{siteContent.propertiesSectionHeading}</h2>
+          <span>{siteContent.propertiesSectionSubtitle}</span>
         </div>
 
         <div className="property-tabs">
@@ -607,41 +658,26 @@ function App() {
       {/* ABOUT */}
       <section className="about" id="about">
         <div className="about-image">
-          <img
-            src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=1000&q=80"
-            alt="Luxury Interior"
-          />
+          <img src={aboutInfo.image} alt="Luxury Interior" />
         </div>
 
         <div className="about-content">
-          <p>ABOUT OUR COMPANY</p>
+          <p>{aboutInfo.tag}</p>
 
           <h2>
-            Building Dreams,
-            <span> Creating Futures</span>
+            {aboutInfo.heading}
+            <span> {aboutInfo.headingHighlight}</span>
           </h2>
 
-          <p className="about-text">
-            We help families, investors and businesses find exceptional
-            properties. Our experienced team provides trusted real-estate
-            solutions from property search to final purchase.
-          </p>
+          <p className="about-text">{aboutInfo.text}</p>
 
           <div className="about-points">
-            <div>
-              <strong>✓</strong>
-              <span>Verified Properties</span>
-            </div>
-
-            <div>
-              <strong>✓</strong>
-              <span>Professional Agents</span>
-            </div>
-
-            <div>
-              <strong>✓</strong>
-              <span>Trusted Service</span>
-            </div>
+            {aboutInfo.points.map((point, idx) => (
+              <div key={idx}>
+                <strong>✓</strong>
+                <span>{point}</span>
+              </div>
+            ))}
           </div>
 
           <button className="gold-btn" onClick={() => setAboutModalOpen(true)}>
@@ -665,38 +701,21 @@ function App() {
               ✕
             </button>
 
-            <p className="about-modal-tag">ABOUT OUR COMPANY</p>
+            <p className="about-modal-tag">{aboutInfo.tag}</p>
             <h2>
-              Building Dreams, <span>Creating Futures</span>
+              {aboutInfo.heading} <span>{aboutInfo.headingHighlight}</span>
             </h2>
 
-            <p className="about-modal-text">
-              Ramzee-Galaxy was founded on a simple belief: finding a home
-              should feel exciting, not overwhelming. For over 15 years,
-              we've guided families, investors, and businesses across Lahore
-              through every stage of the real-estate journey — from the
-              first property search to the final signature.
-            </p>
-
-            <p className="about-modal-text">
-              Our team of licensed, experienced agents combines local market
-              knowledge with a genuinely personal approach. Every listing on
-              this site is verified, every transaction is handled with full
-              transparency, and every client gets direct access to a
-              dedicated consultant — not a call center.
-            </p>
-
-            <p className="about-modal-text">
-              Whether you're buying your first home, renting a place in the
-              city, or selling a property at the right price, our mission is
-              the same: make it simple, make it trustworthy, and make it
-              feel like home.
-            </p>
+            {aboutInfo.modalParagraphs.map((paragraph, idx) => (
+              <p className="about-modal-text" key={idx}>
+                {paragraph}
+              </p>
+            ))}
 
             <div className="about-modal-points">
-              <span>✓ Verified Properties</span>
-              <span>✓ Professional Agents</span>
-              <span>✓ Trusted Service</span>
+              {aboutInfo.points.map((point, idx) => (
+                <span key={idx}>✓ {point}</span>
+              ))}
             </div>
           </div>
         </div>
@@ -705,52 +724,34 @@ function App() {
       {/* SERVICES */}
       <section className="services" id="services">
         <div className="section-heading">
-          <p>WHAT WE OFFER</p>
-          <h2>Our Services</h2>
+          <p>{siteContent.servicesSectionTag}</p>
+          <h2>{siteContent.servicesSectionHeading}</h2>
         </div>
 
         <div className="service-grid">
-          <div
-            className="service-card"
-            onClick={() => goToProperties("sale")}
-          >
-            <div className="service-icon">🏠</div>
-            <h3>Buy Property</h3>
-            <p>
-              Find your ideal home from our collection of premium properties.
-            </p>
-          </div>
-
-          <div
-            className="service-card"
-            onClick={() => goToProperties("rent")}
-          >
-            <div className="service-icon">🔑</div>
-            <h3>Rent Property</h3>
-            <p>
-              Explore quality rental properties in prime locations.
-            </p>
-          </div>
-
-          <div
-            className="service-card"
-            onClick={() => setContactModalOpen(true)}
-          >
-            <div className="service-icon">💰</div>
-            <h3>Sell Property</h3>
-            <p>
-              Get professional assistance to sell your property at the right
-              price.
-            </p>
-          </div>
+          {siteContent.services.map((service, idx) => (
+            <div
+              className="service-card"
+              key={idx}
+              onClick={() => {
+                if (idx === 0) goToProperties("sale");
+                else if (idx === 1) goToProperties("rent");
+                else setContactModalOpen(true);
+              }}
+            >
+              <div className="service-icon">{service.icon}</div>
+              <h3>{service.title}</h3>
+              <p>{service.description}</p>
+            </div>
+          ))}
         </div>
       </section>
 
       {/* CONTACT */}
       <section className="contact" id="contact">
         <div>
-          <p>READY TO FIND YOUR HOME?</p>
-          <h2>Let's Make Your Dream Home a Reality.</h2>
+          <p>{siteContent.contactSectionTag}</p>
+          <h2>{siteContent.contactSectionHeading}</h2>
         </div>
 
         <button className="contact-btn" onClick={() => setContactModalOpen(true)}>
@@ -805,13 +806,33 @@ function App() {
 
       {/* FOOTER */}
       <footer>
-        <div>
-          <h2>REAL ESTATE</h2>
-          <p>Premium Properties & Real Estate Solutions</p>
+        <div className="footer-grid">
+          <div className="footer-brand">
+            <h2>{siteContent.brandName}</h2>
+            <p>{siteContent.footerTagline}</p>
+          </div>
+
+          <div className="footer-col">
+            <h3>Contact</h3>
+            <p>{realtorInfo.email}</p>
+            <p>{realtorInfo.phone}</p>
+            {realtorInfo.altPhone && <p>{realtorInfo.altPhone}</p>}
+          </div>
+
+          <div className="footer-col">
+            <h3>Our Offices</h3>
+            {realtorInfo.offices.map((office, idx) => (
+              <p key={idx}>
+                <strong>{office.city}</strong>
+                <br />
+                {office.address}
+              </p>
+            ))}
+          </div>
         </div>
 
-        <div>
-          <p>© 2026 Real Estate. All Rights Reserved.</p>
+        <div className="footer-bottom">
+          <p>{siteContent.footerCopyright}</p>
         </div>
       </footer>
 
