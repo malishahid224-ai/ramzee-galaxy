@@ -152,6 +152,7 @@ function App() {
   const [activeImage, setActiveImage] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
   const [contactModalOpen, setContactModalOpen] = useState(false);
+  const [aboutModalOpen, setAboutModalOpen] = useState(false);
 
   const [realtorInfo, setRealtorInfo] = useState(() => {
     const saved = localStorage.getItem("realtorInfo");
@@ -190,6 +191,13 @@ function App() {
 
   const handleHeroSearch = () => {
     setFilterType(dealType === "rent" ? "rent" : "sale");
+    document
+      .getElementById("properties")
+      ?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const goToProperties = (type) => {
+    setFilterType(type);
     document
       .getElementById("properties")
       ?.scrollIntoView({ behavior: "smooth" });
@@ -636,9 +644,63 @@ function App() {
             </div>
           </div>
 
-          <button className="gold-btn">Learn More</button>
+          <button className="gold-btn" onClick={() => setAboutModalOpen(true)}>
+            Learn More
+          </button>
         </div>
       </section>
+
+      {/* ABOUT COMPANY POPUP */}
+      {aboutModalOpen && (
+        <div
+          className="modal-overlay"
+          onClick={() => setAboutModalOpen(false)}
+        >
+          <div className="about-modal" onClick={(e) => e.stopPropagation()}>
+            <button
+              className="modal-close"
+              onClick={() => setAboutModalOpen(false)}
+              aria-label="Close"
+            >
+              ✕
+            </button>
+
+            <p className="about-modal-tag">ABOUT OUR COMPANY</p>
+            <h2>
+              Building Dreams, <span>Creating Futures</span>
+            </h2>
+
+            <p className="about-modal-text">
+              Ramzee-Galaxy was founded on a simple belief: finding a home
+              should feel exciting, not overwhelming. For over 15 years,
+              we've guided families, investors, and businesses across Lahore
+              through every stage of the real-estate journey — from the
+              first property search to the final signature.
+            </p>
+
+            <p className="about-modal-text">
+              Our team of licensed, experienced agents combines local market
+              knowledge with a genuinely personal approach. Every listing on
+              this site is verified, every transaction is handled with full
+              transparency, and every client gets direct access to a
+              dedicated consultant — not a call center.
+            </p>
+
+            <p className="about-modal-text">
+              Whether you're buying your first home, renting a place in the
+              city, or selling a property at the right price, our mission is
+              the same: make it simple, make it trustworthy, and make it
+              feel like home.
+            </p>
+
+            <div className="about-modal-points">
+              <span>✓ Verified Properties</span>
+              <span>✓ Professional Agents</span>
+              <span>✓ Trusted Service</span>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* SERVICES */}
       <section className="services" id="services">
@@ -648,7 +710,10 @@ function App() {
         </div>
 
         <div className="service-grid">
-          <div className="service-card">
+          <div
+            className="service-card"
+            onClick={() => goToProperties("sale")}
+          >
             <div className="service-icon">🏠</div>
             <h3>Buy Property</h3>
             <p>
@@ -656,7 +721,10 @@ function App() {
             </p>
           </div>
 
-          <div className="service-card">
+          <div
+            className="service-card"
+            onClick={() => goToProperties("rent")}
+          >
             <div className="service-icon">🔑</div>
             <h3>Rent Property</h3>
             <p>
@@ -664,7 +732,10 @@ function App() {
             </p>
           </div>
 
-          <div className="service-card">
+          <div
+            className="service-card"
+            onClick={() => setContactModalOpen(true)}
+          >
             <div className="service-icon">💰</div>
             <h3>Sell Property</h3>
             <p>

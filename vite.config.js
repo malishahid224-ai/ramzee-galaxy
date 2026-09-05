@@ -6,9 +6,8 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      "/api": "https://ramzee-galaxy-7px4.vercel.app",
-      // "/api": "http://localhost:5000",
-
+      // "/api": "https://ramzee-galaxy-7px4.vercel.app",
+      "/api": "http://localhost:5000",
     },
   },
 })

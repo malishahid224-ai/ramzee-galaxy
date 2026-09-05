@@ -5,3 +5,15 @@
 .property-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 22px; background: #f8f7f3; }.property-form h2, .property-form .wide { grid-column: 1 / -1; }.property-form textarea { min-height: 80px; }
 .admin-shell input, .admin-shell select, .admin-shell textarea, .admin-shell button { box-sizing: border-box; width: 100%; padding: 12px; border: 1px solid #d7d2c6; font: inherit; }.admin-shell button { width: auto; border: 0; background: #a27c32; color: #fff; cursor: pointer; }.admin-shell .secondary { background: #e9e5da; color: #322b1c; margin-left: 8px; }.admin-shell .danger { background: #9f3131; margin-left: 8px; }.admin-message { min-height: 1.25em; color: #8b2c2c !important; letter-spacing: normal !important; }.listing-table { margin-top: 36px; }.listing-table article { padding: 16px 0; border-bottom: 1px solid #eee; }.listing-table span { display: block; margin-top: 5px; color: #777; }
 @media (max-width: 640px) { .admin-login, .admin-dashboard { padding: 22px; }.property-form { grid-template-columns: 1fr; }.property-form h2, .property-form .wide { grid-column: auto; }.admin-dashboard > header, .listing-table article { align-items: flex-start; flex-direction: column; } }
+
+.image-manager { display: flex; flex-direction: column; gap: 10px; }
+.image-manager > label { font-weight: 600; color: #322b1c; }
+.image-manager input[type="file"] { padding: 10px; background: #fff; cursor: pointer; }
+.image-url-row { display: flex; gap: 8px; }
+.image-url-row input { flex: 1; }
+.image-url-row button { width: auto; flex-shrink: 0; padding: 12px 18px; }
+.image-preview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; margin-top: 4px; }
+.image-preview-item { position: relative; aspect-ratio: 4 / 3; border: 1px solid #d7d2c6; overflow: hidden; background: #fff; }
+.image-preview-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cover-badge { position: absolute; bottom: 4px; left: 4px; background: #a27c32; color: #fff; font-size: 10px; padding: 3px 7px; letter-spacing: 0.05em; }
+.remove-image-btn { position: absolute; top: 4px; right: 4px; width: 22px; height: 22px; padding: 0; border-radius: 50%; background: rgba(0, 0, 0, 0.65); color: #fff; font-size: 12px; line-height: 1; }

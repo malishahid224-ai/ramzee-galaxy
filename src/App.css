@@ -891,6 +891,66 @@ select {
   }
 }
 
+/* ABOUT COMPANY MODAL */
+
+.about-modal {
+  background: #141414;
+  border: 1px solid #333;
+  width: 100%;
+  max-width: 600px;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+  border-radius: 4px;
+  padding: 45px;
+}
+
+.about-modal-tag {
+  color: #d4af37;
+  letter-spacing: 4px;
+  font-size: 12px;
+  margin-bottom: 15px;
+}
+
+.about-modal h2 {
+  font-size: clamp(24px, 4vw, 32px);
+  line-height: 1.2;
+  margin-bottom: 22px;
+}
+
+.about-modal h2 span {
+  color: #d4af37;
+}
+
+.about-modal-text {
+  color: #aaa;
+  line-height: 1.8;
+  font-size: 14px;
+  margin-bottom: 18px;
+}
+
+.about-modal-points {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  margin-top: 10px;
+  padding-top: 20px;
+  border-top: 1px solid #292929;
+}
+
+.about-modal-points span {
+  color: #d4af37;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+@media (max-width: 480px) {
+  .about-modal {
+    padding: 30px 22px;
+  }
+}
+
 /* ABOUT */
 
 .about {
@@ -975,6 +1035,7 @@ select {
   text-align: center;
   border: 1px solid #292929;
   transition: 0.3s;
+  cursor: pointer;
 }
 
 .service-card:hover {

@@ -4,7 +4,7 @@ import "./AdminPanel.css";
 const apiUrl = import.meta.env.VITE_API_URL || "/api";
 const emptyProperty = {
   title: "", location: "", price: "", purpose: "sale", areaUnit: "marla",
-  beds: "", baths: "", area: "", image: "", description: "", openHouseDate: "", openHouseTime: "", status: "published",
+  beds: "", baths: "", area: "", image: "", gallery: [], description: "", openHouseDate: "", openHouseTime: "", status: "published",
 };
 
 const initialRealtor = {
@@ -29,6 +29,7 @@ function AdminPanel() {
   const [form, setForm] = useState(emptyProperty);
   const [editingId, setEditingId] = useState("");
   const [message, setMessage] = useState("");
+  const [imageUrlInput, setImageUrlInput] = useState("");
   
   // Realtor state management
   const [realtor, setRealtor] = useState(() => {
@@ -65,15 +66,55 @@ function AdminPanel() {
   const saveProperty = async (event) => {
     event.preventDefault(); setMessage("");
     try {
+      const payload = { ...form, image: (form.gallery && form.gallery[0]) || form.image || "" };
       const path = editingId ? `/admin/properties/${editingId}` : "/admin/properties";
-      await request(path, { method: editingId ? "PATCH" : "POST", body: JSON.stringify(form) });
+      await request(path, { method: editingId ? "PATCH" : "POST", body: JSON.stringify(payload) });
       setForm(emptyProperty); setEditingId(""); setMessage("Property saved."); loadProperties();
     } catch (error) { setMessage(error.message); }
   };
 
+  const handleImageFiles = (event) => {
+    const files = Array.from(event.target.files || []);
+    event.target.value = "";
+    if (!files.length) return;
+
+    Promise.all(
+      files.map(
+        (file) =>
+          new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+          })
+      )
+    ).then((results) => {
+      setForm((prev) => ({ ...prev, gallery: [...(prev.gallery || []), ...results] }));
+    });
+  };
+
+  const addImageUrl = () => {
+    const trimmed = imageUrlInput.trim();
+    if (!trimmed) return;
+    setForm((prev) => ({ ...prev, gallery: [...(prev.gallery || []), trimmed] }));
+    setImageUrlInput("");
+  };
+
+  const removeImage = (index) => {
+    setForm((prev) => ({ ...prev, gallery: prev.gallery.filter((_, i) => i !== index) }));
+  };
+
   const editProperty = (property) => {
     setEditingId(property.id);
-    setForm({ ...emptyProperty, ...property, price: String(property.price), beds: String(property.beds || ""), baths: String(property.baths || ""), area: String(property.area || "") });
+    setForm({
+      ...emptyProperty,
+      ...property,
+      price: String(property.price),
+      beds: String(property.beds || ""),
+      baths: String(property.baths || ""),
+      area: String(property.area || ""),
+      gallery: property.gallery && property.gallery.length ? property.gallery : (property.image ? [property.image] : []),
+    });
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -157,7 +198,31 @@ function AdminPanel() {
               <input type="number" min="0" placeholder="Area" value={form.area} onChange={(e) => setForm({ ...form, area: e.target.value })} />
               <input type="number" min="0" placeholder="Bedrooms" value={form.beds} onChange={(e) => setForm({ ...form, beds: e.target.value })} />
               <input type="number" min="0" placeholder="Bathrooms" value={form.baths} onChange={(e) => setForm({ ...form, baths: e.target.value })} />
-              <input className="wide" placeholder="Image URL" value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })} />
+              <div className="wide image-manager">
+                <label>Property Images</label>
+                <input type="file" accept="image/*" multiple onChange={handleImageFiles} />
+
+                <div className="image-url-row">
+                  <input
+                    placeholder="Or paste an image URL"
+                    value={imageUrlInput}
+                    onChange={(e) => setImageUrlInput(e.target.value)}
+                  />
+                  <button type="button" className="secondary" onClick={addImageUrl}>Add</button>
+                </div>
+
+                {form.gallery && form.gallery.length > 0 && (
+                  <div className="image-preview-grid">
+                    {form.gallery.map((img, idx) => (
+                      <div className="image-preview-item" key={idx}>
+                        <img src={img} alt={`Property image ${idx + 1}`} />
+                        {idx === 0 && <span className="cover-badge">Cover</span>}
+                        <button type="button" className="remove-image-btn" onClick={() => removeImage(idx)}>✕</button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
               <textarea className="wide" placeholder="Description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
               <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })}>
                 <option value="published">Published</option>
