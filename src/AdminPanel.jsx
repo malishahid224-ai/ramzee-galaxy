@@ -23,7 +23,7 @@ const initialRealtor = {
 
 const initialAbout = {
   image: "https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=1000&q=80",
-  tag: "ABOUT OUR COMPANY",
+  tag: "About our company",
   heading: "Building Dreams,",
   headingHighlight: "Creating Futures",
   text: "We help families, investors and businesses find exceptional properties. Our experienced team provides trusted real-estate solutions from property search to final purchase.",
@@ -38,11 +38,11 @@ const initialAbout = {
 const initialSiteContent = {
   brandName: "Ramzee-Galaxy",
   brandTagline: "PREMIUM PROPERTIES",
-  heroSmallTitle: "WELCOME TO YOUR FUTURE",
+  heroSmallTitle: "Welcome to your future",
   heroHeading: "Find Your",
   heroHeadingHighlight: "Dream Home",
   heroText: "Discover exceptional properties in the most desirable locations. Your perfect home is waiting for you.",
-  realtorSectionTag: "AUTHORIZED BROKER",
+  realtorSectionTag: "Authorized broker",
   realtorSectionHeading: "Meet Your Lead Realtor",
   stats: [
     { value: "500+", label: "Properties" },
@@ -50,17 +50,17 @@ const initialSiteContent = {
     { value: "50+", label: "Expert Agents" },
     { value: "15+", label: "Years Experience" },
   ],
-  propertiesSectionTag: "EXPLORE OUR COLLECTION",
+  propertiesSectionTag: "Explore our collection",
   propertiesSectionHeading: "Featured Properties",
   propertiesSectionSubtitle: "Discover carefully selected properties designed for modern living.",
-  servicesSectionTag: "WHAT WE OFFER",
+  servicesSectionTag: "What we offer",
   servicesSectionHeading: "Our Services",
   services: [
     { icon: "🏠", title: "Buy Property", description: "Find your ideal home from our collection of premium properties." },
     { icon: "🔑", title: "Rent Property", description: "Explore quality rental properties in prime locations." },
     { icon: "💰", title: "Sell Property", description: "Get professional assistance to sell your property at the right price." },
   ],
-  contactSectionTag: "READY TO FIND YOUR HOME?",
+  contactSectionTag: "Ready to find your home?",
   contactSectionHeading: "Let's Make Your Dream Home a Reality.",
   footerTagline: "Premium Properties & Real Estate Solutions",
   footerCopyright: "© 2026 Real Estate. All Rights Reserved.",
@@ -448,7 +448,7 @@ function AdminPanel() {
               )}
             </div>
 
-            <input required placeholder="Small tag (e.g. ABOUT OUR COMPANY)" className="wide" value={about.tag} onChange={(e) => setAbout({ ...about, tag: e.target.value })} />
+            <input required placeholder="Small tag (e.g. About our company)" className="wide" value={about.tag} onChange={(e) => setAbout({ ...about, tag: e.target.value })} />
             <input required placeholder="Heading (first line)" value={about.heading} onChange={(e) => setAbout({ ...about, heading: e.target.value })} />
             <input required placeholder="Heading highlight (gold text)" value={about.headingHighlight} onChange={(e) => setAbout({ ...about, headingHighlight: e.target.value })} />
             <textarea required className="wide" placeholder="Short description shown on the page" value={about.text} onChange={(e) => setAbout({ ...about, text: e.target.value })} />
@@ -524,7 +524,7 @@ function AdminPanel() {
             <div className="wide" style={{ marginTop: "1rem" }}>
               <h3>Realtor Section Heading</h3>
             </div>
-            <input required placeholder="Small tag (e.g. AUTHORIZED BROKER)" value={siteContent.realtorSectionTag} onChange={(e) => setSiteContent({ ...siteContent, realtorSectionTag: e.target.value })} />
+            <input required placeholder="Small tag (e.g. Authorized broker)" value={siteContent.realtorSectionTag} onChange={(e) => setSiteContent({ ...siteContent, realtorSectionTag: e.target.value })} />
             <input required placeholder="Heading" value={siteContent.realtorSectionHeading} onChange={(e) => setSiteContent({ ...siteContent, realtorSectionHeading: e.target.value })} />
 
             <div className="wide" style={{ marginTop: "1rem" }}>
@@ -537,7 +537,7 @@ function AdminPanel() {
             <div className="wide" style={{ marginTop: "1rem" }}>
               <h3>Services Section</h3>
             </div>
-            <input required placeholder="Small tag (e.g. WHAT WE OFFER)" value={siteContent.servicesSectionTag} onChange={(e) => setSiteContent({ ...siteContent, servicesSectionTag: e.target.value })} />
+            <input required placeholder="Small tag (e.g. What we offer)" value={siteContent.servicesSectionTag} onChange={(e) => setSiteContent({ ...siteContent, servicesSectionTag: e.target.value })} />
             <input required placeholder="Heading (e.g. Our Services)" value={siteContent.servicesSectionHeading} onChange={(e) => setSiteContent({ ...siteContent, servicesSectionHeading: e.target.value })} />
 
             <div className="wide" style={{ marginTop: "0.5rem" }}>

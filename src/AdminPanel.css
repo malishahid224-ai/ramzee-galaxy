@@ -1,19 +1,72 @@
-.admin-shell { min-height: 100vh; padding: 48px 20px; background: #f5f3ee; color: #202020; }
-.admin-login, .admin-dashboard { max-width: 1040px; margin: auto; background: #fff; padding: 36px; box-shadow: 0 12px 32px #00000012; }
-.admin-login { max-width: 420px; margin-top: 8vh; }.admin-login form { display: grid; gap: 12px; }
-.admin-dashboard > header, .listing-table article { display: flex; justify-content: space-between; gap: 16px; align-items: center; }.admin-dashboard h1 { margin: 4px 0 22px; }.admin-dashboard p { color: #91702c; letter-spacing: .08em; }
-.property-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 22px; background: #f8f7f3; }.property-form h2, .property-form .wide { grid-column: 1 / -1; }.property-form textarea { min-height: 80px; }
-.admin-shell input, .admin-shell select, .admin-shell textarea, .admin-shell button { box-sizing: border-box; width: 100%; padding: 12px; border: 1px solid #d7d2c6; font: inherit; }.admin-shell button { width: auto; border: 0; background: #a27c32; color: #fff; cursor: pointer; }.admin-shell .secondary { background: #e9e5da; color: #322b1c; margin-left: 8px; }.admin-shell .danger { background: #9f3131; margin-left: 8px; }.admin-message { min-height: 1.25em; color: #8b2c2c !important; letter-spacing: normal !important; }.listing-table { margin-top: 36px; }.listing-table article { padding: 16px 0; border-bottom: 1px solid #eee; }.listing-table span { display: block; margin-top: 5px; color: #777; }
+.admin-shell {
+  min-height: 100vh;
+  padding: 48px 20px;
+  background-color: #f5f3ee;
+  background-image: radial-gradient(ellipse 700px 460px at 8% -8%, rgba(35, 74, 59, 0.07), transparent 60%),
+    radial-gradient(ellipse 800px 520px at 100% 0%, rgba(162, 124, 50, 0.1), transparent 55%);
+  color: #201d18;
+  font-family: "Inter", -apple-system, sans-serif;
+}
+.admin-login, .admin-dashboard {
+  max-width: 1040px;
+  margin: auto;
+  background: #fff;
+  padding: 36px;
+  border: 1px solid #ddd5c2;
+  border-radius: 6px;
+  box-shadow: 0 14px 34px rgba(40, 32, 16, 0.1);
+}
+.admin-login { max-width: 420px; margin-top: 8vh; }
+.admin-login form { display: grid; gap: 12px; }
+.admin-dashboard > header, .listing-table article { display: flex; justify-content: space-between; gap: 16px; align-items: center; }
+.admin-dashboard h1 { margin: 4px 0 22px; font-family: "Fraunces", Georgia, serif; font-weight: 500; color: #201d18; }
+.admin-dashboard p { color: #a27c32; letter-spacing: .08em; }
+.property-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 22px; background: #f5f3ee; border: 1px solid #ddd5c2; border-radius: 4px; }
+.property-form h2, .property-form .wide { grid-column: 1 / -1; font-family: "Fraunces", Georgia, serif; font-weight: 500; }
+.property-form textarea { min-height: 80px; }
+.admin-shell input, .admin-shell select, .admin-shell textarea, .admin-shell button {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd5c2;
+  border-radius: 3px;
+  font: inherit;
+  background: #fff;
+  color: #201d18;
+}
+.admin-shell input:focus, .admin-shell select:focus, .admin-shell textarea:focus {
+  outline: none;
+  border-color: #234a3b;
+}
+.admin-shell button {
+  width: auto;
+  border: 0;
+  background: #234a3b;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+.admin-shell button:hover { background: #17332a; }
+.admin-shell .secondary { background: #ece4d2; color: #201d18; margin-left: 8px; }
+.admin-shell .secondary:hover { background: #ddd5c2; }
+.admin-shell .danger { background: #9f3131; margin-left: 8px; }
+.admin-shell .danger:hover { background: #832727; }
+.admin-message { min-height: 1.25em; color: #9f3131 !important; letter-spacing: normal !important; }
+.listing-table { margin-top: 36px; }
+.listing-table article { padding: 16px 0; border-bottom: 1px solid #ece4d2; }
+.listing-table span { display: block; margin-top: 5px; color: #948c7c; }
 @media (max-width: 640px) { .admin-login, .admin-dashboard { padding: 22px; }.property-form { grid-template-columns: 1fr; }.property-form h2, .property-form .wide { grid-column: auto; }.admin-dashboard > header, .listing-table article { align-items: flex-start; flex-direction: column; } }
 
 .image-manager { display: flex; flex-direction: column; gap: 10px; }
-.image-manager > label { font-weight: 600; color: #322b1c; }
+.image-manager > label { font-weight: 600; color: #201d18; }
 .image-manager input[type="file"] { padding: 10px; background: #fff; cursor: pointer; }
 .image-url-row { display: flex; gap: 8px; }
 .image-url-row input { flex: 1; }
-.image-url-row button { width: auto; flex-shrink: 0; padding: 12px 18px; }
+.image-url-row button { width: auto; flex-shrink: 0; padding: 12px 18px; background: #a27c32; }
+.image-url-row button:hover { background: #c9a35f; }
 .image-preview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; margin-top: 4px; }
-.image-preview-item { position: relative; aspect-ratio: 4 / 3; border: 1px solid #d7d2c6; overflow: hidden; background: #fff; }
+.image-preview-item { position: relative; aspect-ratio: 4 / 3; border: 1px solid #ddd5c2; border-radius: 3px; overflow: hidden; background: #fff; }
 .image-preview-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.cover-badge { position: absolute; bottom: 4px; left: 4px; background: #a27c32; color: #fff; font-size: 10px; padding: 3px 7px; letter-spacing: 0.05em; }
-.remove-image-btn { position: absolute; top: 4px; right: 4px; width: 22px; height: 22px; padding: 0; border-radius: 50%; background: rgba(0, 0, 0, 0.65); color: #fff; font-size: 12px; line-height: 1; }
+.cover-badge { position: absolute; bottom: 4px; left: 4px; background: #a27c32; color: #fff; font-size: 10px; padding: 3px 7px; letter-spacing: 0.05em; border-radius: 2px; }
+.remove-image-btn { position: absolute; top: 4px; right: 4px; width: 22px; height: 22px; padding: 0; border-radius: 50%; background: rgba(32, 29, 24, 0.65); color: #fff; font-size: 12px; line-height: 1; }

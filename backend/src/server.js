@@ -19,7 +19,7 @@ const mongoDatabaseName = process.env.MONGODB_DB || "ticketing";
 const defaultAbout = {
   id: "default-about",
   image: "https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=1000&q=80",
-  tag: "ABOUT OUR COMPANY",
+  tag: "About our company",
   heading: "Building Dreams,",
   headingHighlight: "Creating Futures",
   text: "We help families, investors and businesses find exceptional properties. Our experienced team provides trusted real-estate solutions from property search to final purchase.",
@@ -36,11 +36,11 @@ const defaultSiteContent = {
   id: "default-site-content",
   brandName: "Ramzee-Galaxy",
   brandTagline: "PREMIUM PROPERTIES",
-  heroSmallTitle: "WELCOME TO YOUR FUTURE",
+  heroSmallTitle: "Welcome to your future",
   heroHeading: "Find Your",
   heroHeadingHighlight: "Dream Home",
   heroText: "Discover exceptional properties in the most desirable locations. Your perfect home is waiting for you.",
-  realtorSectionTag: "AUTHORIZED BROKER",
+  realtorSectionTag: "Authorized broker",
   realtorSectionHeading: "Meet Your Lead Realtor",
   stats: [
     { value: "500+", label: "Properties" },
@@ -48,17 +48,17 @@ const defaultSiteContent = {
     { value: "50+", label: "Expert Agents" },
     { value: "15+", label: "Years Experience" },
   ],
-  propertiesSectionTag: "EXPLORE OUR COLLECTION",
+  propertiesSectionTag: "Explore our collection",
   propertiesSectionHeading: "Featured Properties",
   propertiesSectionSubtitle: "Discover carefully selected properties designed for modern living.",
-  servicesSectionTag: "WHAT WE OFFER",
+  servicesSectionTag: "What we offer",
   servicesSectionHeading: "Our Services",
   services: [
     { icon: "🏠", title: "Buy Property", description: "Find your ideal home from our collection of premium properties." },
     { icon: "🔑", title: "Rent Property", description: "Explore quality rental properties in prime locations." },
     { icon: "💰", title: "Sell Property", description: "Get professional assistance to sell your property at the right price." },
   ],
-  contactSectionTag: "READY TO FIND YOUR HOME?",
+  contactSectionTag: "Ready to find your home?",
   contactSectionHeading: "Let's Make Your Dream Home a Reality.",
   footerTagline: "Premium Properties & Real Estate Solutions",
   footerCopyright: "© 2026 Real Estate. All Rights Reserved.",
@@ -284,7 +284,7 @@ app.delete("/api/admin/properties/:id", authenticateAdmin, async (req, res, next
 app.get("/api/realtor", async (_req, res, next) => {
   try {
     const realtor = await realtorCollection.findOne({}, { projection: { _id: 0 } });
-    res.json(realtor || defaultRealtor);
+    res.json({ ...defaultRealtor, ...realtor });
   } catch (error) {
     next(error);
   }
@@ -323,7 +323,7 @@ app.put("/api/admin/realtor", authenticateAdmin, async (req, res, next) => {
 app.get("/api/about", async (_req, res, next) => {
   try {
     const about = await aboutCollection.findOne({}, { projection: { _id: 0 } });
-    res.json(about || defaultAbout);
+    res.json({ ...defaultAbout, ...about });
   } catch (error) {
     next(error);
   }
@@ -365,7 +365,7 @@ app.put("/api/admin/about", authenticateAdmin, async (req, res, next) => {
 app.get("/api/site-content", async (_req, res, next) => {
   try {
     const content = await siteContentCollection.findOne({}, { projection: { _id: 0 } });
-    res.json(content || defaultSiteContent);
+    res.json({ ...defaultSiteContent, ...content });
   } catch (error) {
     next(error);
   }
@@ -373,7 +373,8 @@ app.get("/api/site-content", async (_req, res, next) => {
 
 app.put("/api/admin/site-content", authenticateAdmin, async (req, res, next) => {
   try {
-    const existing = (await siteContentCollection.findOne({}, { projection: { _id: 0 } })) || defaultSiteContent;
+    const saved = await siteContentCollection.findOne({}, { projection: { _id: 0 } });
+    const existing = { ...defaultSiteContent, ...saved };
     const textField = (key) => String(req.body[key] ?? existing[key]).trim();
     const arrayField = (key) => (Array.isArray(req.body[key]) ? req.body[key] : existing[key]);
 

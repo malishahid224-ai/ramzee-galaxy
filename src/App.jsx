@@ -837,7 +837,7 @@ function App() {
       </footer>
 
       {/* CHAT WIDGET */}
-      <ChatWidget />
+      <ChatWidget phone={realtorInfo.altPhone} />
     </div>
   );
 }
