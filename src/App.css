@@ -1,23 +1,24 @@
 @import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap");
 
 :root {
-  --stone: #f5f3ee;
-  --stone-deep: #ece4d2;
-  --sage: #eaf0e9;
+  --stone: #f2ede0;
+  --stone-deep: #e2d5b3;
+  --sage: #dfe9dc;
   --white: #ffffff;
-  --ink: #201d18;
-  --ink-soft: #6b6357;
-  --ink-faint: #948c7c;
-  --line: #ddd5c2;
-  --emerald: #234a3b;
-  --emerald-dark: #17332a;
-  --emerald-soft: #e7efe8;
-  --brass: #a27c32;
-  --brass-light: #c9a35f;
+  --ink: #16130e;
+  --ink-soft: #4d4638;
+  --ink-faint: #7a7260;
+  --line: #d4c49a;
+  --emerald: #163d2e;
+  --emerald-dark: #0d281e;
+  --emerald-bright: #2f6b52;
+  --emerald-soft: #dfebe1;
+  --brass: #b8863a;
+  --brass-light: #e0b46c;
   --danger: #9f3131;
-  --shadow-sm: 0 2px 10px rgba(40, 32, 16, 0.06);
-  --shadow-md: 0 14px 34px rgba(40, 32, 16, 0.10);
-  --shadow-lg: 0 24px 60px rgba(40, 32, 16, 0.16);
+  --shadow-sm: 0 3px 12px rgba(28, 20, 5, 0.1);
+  --shadow-md: 0 16px 40px rgba(28, 20, 5, 0.16);
+  --shadow-lg: 0 30px 70px rgba(28, 20, 5, 0.26);
 }
 
 * {
@@ -1587,5 +1588,27 @@ footer {
 
   .contact h2 {
     font-size: 24px;
+  }
+}
+
+/* MOBILE BACKGROUND-IMAGE FIX
+   background-attachment: fixed is unreliable on phones (iOS Safari in
+   particular can fail to paint it at all), so on touch devices we fall
+   back to normal scrolling backgrounds. The photos still show — they
+   just move with the page instead of staying pinned. */
+
+@media (hover: none) and (pointer: coarse), (max-width: 900px) {
+  body {
+    background-attachment: scroll, scroll, scroll, scroll;
+  }
+
+  .realtor-section {
+    background-attachment: scroll, scroll, scroll;
+  }
+
+  .stats,
+  .about,
+  footer {
+    background-attachment: scroll;
   }
 }
