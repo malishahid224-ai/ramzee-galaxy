@@ -3,7 +3,6 @@
 :root {
   --stone: #f2ede0;
   --stone-deep: #e2d5b3;
-  --sage: #dfe9dc;
   --white: #ffffff;
   --ink: #16130e;
   --ink-soft: #4d4638;
@@ -15,6 +14,9 @@
   --emerald-soft: #dfebe1;
   --brass: #b8863a;
   --brass-light: #e0b46c;
+  --gold-tint: #f5e7c3;
+  --on-dark-muted: rgba(242, 237, 224, 0.72);
+  --on-dark-line: rgba(242, 237, 224, 0.2);
   --danger: #9f3131;
   --shadow-sm: 0 3px 12px rgba(28, 20, 5, 0.1);
   --shadow-md: 0 16px 40px rgba(28, 20, 5, 0.16);
@@ -404,11 +406,11 @@ select {
   display: grid;
   grid-template-columns: 320px 1fr;
   gap: 40px;
-  background: var(--white);
-  border: 1px solid var(--line);
+  background: var(--emerald);
+  border: 1px solid var(--brass);
   padding: 40px;
   border-radius: 4px;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 20px 45px rgba(184, 134, 58, 0.18), var(--shadow-md);
 }
 
 .realtor-photo {
@@ -425,8 +427,8 @@ select {
 }
 
 .license-badge {
-  background: var(--emerald-soft);
-  border: 1px solid var(--line);
+  background: var(--emerald);
+  border: 1px solid var(--brass);
   padding: 12px;
   text-align: center;
   border-radius: 4px;
@@ -435,24 +437,24 @@ select {
 .license-badge span {
   display: block;
   font-size: 10px;
-  color: var(--ink-faint);
+  color: var(--brass-light);
   letter-spacing: 2px;
   margin-bottom: 4px;
 }
 
 .license-badge strong {
-  color: var(--emerald);
+  color: var(--white);
   font-size: 15px;
 }
 
 .realtor-details h2 {
   font-size: clamp(24px, 4vw, 32px);
-  color: var(--ink);
+  color: var(--white);
   margin-bottom: 5px;
 }
 
 .realtor-title {
-  color: var(--brass);
+  color: var(--brass-light);
   font-size: 14px;
   font-weight: 600;
   margin-bottom: 30px;
@@ -463,7 +465,7 @@ select {
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   padding-bottom: 30px;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid var(--on-dark-line);
   margin-bottom: 30px;
 }
 
@@ -471,9 +473,10 @@ select {
   display: flex;
   align-items: center;
   gap: 12px;
-  background: var(--stone);
+  background: var(--gold-tint);
   padding: 15px;
   border: 1px solid var(--line);
+  border-left: 3px solid var(--brass);
   border-radius: 3px;
 }
 
@@ -496,7 +499,7 @@ select {
 .office-addresses h3 {
   font-size: 16px;
   margin-bottom: 15px;
-  color: var(--ink);
+  color: var(--white);
 }
 
 .office-list {
@@ -506,7 +509,7 @@ select {
 }
 
 .office-card {
-  background: var(--stone);
+  background: var(--gold-tint);
   padding: 18px;
   border-left: 3px solid var(--brass);
   border-radius: 0 3px 3px 0;
@@ -632,8 +635,8 @@ select {
 }
 
 .property-card {
-  background: var(--white);
-  border: 1px solid var(--line);
+  background: var(--emerald);
+  border: 1px solid var(--brass);
   overflow: hidden;
   transition: 0.4s;
   border-radius: 4px;
@@ -642,7 +645,7 @@ select {
 
 .property-card:hover {
   transform: translateY(-8px);
-  border-color: var(--emerald);
+  border-color: var(--brass-light);
   box-shadow: var(--shadow-lg);
 }
 
@@ -702,7 +705,7 @@ select {
 }
 
 .location {
-  color: var(--brass);
+  color: var(--brass-light);
   font-size: 12px;
   font-weight: 600;
   margin-bottom: 12px;
@@ -711,11 +714,11 @@ select {
 .property-info h3 {
   font-size: 21px;
   margin-bottom: 15px;
-  color: var(--ink);
+  color: var(--white);
 }
 
 .property-info h2 {
-  color: var(--emerald);
+  color: var(--brass-light);
   font-size: 22px;
   margin-bottom: 20px;
 }
@@ -723,10 +726,10 @@ select {
 .property-details {
   display: flex;
   gap: 12px;
-  color: var(--ink-faint);
+  color: var(--on-dark-muted);
   font-size: 12px;
   padding-bottom: 20px;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid var(--on-dark-line);
 }
 
 .details-btn {
@@ -734,8 +737,8 @@ select {
   margin-top: 20px;
   padding: 13px;
   background: transparent;
-  color: var(--emerald);
-  border: 1px solid var(--emerald);
+  color: var(--brass-light);
+  border: 1px solid var(--brass-light);
   cursor: pointer;
   transition: 0.3s;
   border-radius: 2px;
@@ -743,8 +746,8 @@ select {
 }
 
 .details-btn:hover {
-  background: var(--emerald);
-  color: var(--white);
+  background: var(--brass-light);
+  color: var(--emerald-dark);
 }
 
 .no-results {
@@ -1082,8 +1085,8 @@ select {
 
 .about {
   padding: 100px 8%;
-  background-color: var(--sage);
-  background-image: linear-gradient(rgba(234, 240, 233, 0.82), rgba(234, 240, 233, 0.82)),
+  background-color: var(--stone);
+  background-image: linear-gradient(rgba(242, 237, 224, 0.82), rgba(242, 237, 224, 0.82)),
     url("https://images.unsplash.com/photo-1746517757473-7c88850e539b?auto=format&fit=crop&w=1800&q=80");
   background-size: cover;
   background-position: center;
@@ -1208,10 +1211,10 @@ select {
 }
 
 .service-card {
-  background: var(--white);
+  background: var(--emerald);
   padding: 45px 35px;
   text-align: center;
-  border: 1px solid var(--line);
+  border: 1px solid var(--brass);
   transition: 0.3s;
   cursor: pointer;
   border-radius: 4px;
@@ -1231,11 +1234,11 @@ select {
 .service-card h3 {
   margin-bottom: 15px;
   font-size: 22px;
-  color: var(--ink);
+  color: var(--white);
 }
 
 .service-card p {
-  color: var(--ink-soft);
+  color: var(--on-dark-muted);
   line-height: 1.7;
 }
 

@@ -137,8 +137,8 @@ const defaultRealtorInfo = {
   name: "Alexander Vance",
   title: "Principal Realtor & Property Consultant",
   licenseNo: "RL-94820-PK",
-  phone: "+92 300 1234567",
-  altPhone: "+92 42 35789000",
+  phone: "+1 (302) 555-0147",
+  altPhone: "+1 (302) 555-0199",
   email: "contact@realestatepremium.com",
   photo:
     "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=800&q=80",

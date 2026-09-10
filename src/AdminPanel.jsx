@@ -3,7 +3,7 @@ import "./AdminPanel.css";
 
 const apiUrl = import.meta.env.VITE_API_URL || "/api";
 const emptyProperty = {
-  title: "", location: "", price: "", purpose: "sale", areaUnit: "marla",
+  title: "", location: "", price: "", purpose: "sale", areaUnit: "sqft",
   beds: "", baths: "", area: "", image: "", gallery: [], description: "", openHouseDate: "", openHouseTime: "", status: "published",
 };
 
@@ -11,8 +11,8 @@ const initialRealtor = {
   name: "Alexander Vance",
   title: "Principal Realtor & Property Consultant",
   licenseNo: "RL-94820-PK",
-  phone: "+92 300 1234567",
-  altPhone: "+92 42 35789000",
+  phone: "+1 (302) 555-0147",
+  altPhone: "+1 (302) 555-0199",
   email: "contact@realestatepremium.com",
   photo: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=800&q=80",
   offices: [
@@ -341,7 +341,7 @@ function AdminPanel() {
                   <input type="time" aria-label="Open house time" value={form.openHouseTime} onChange={(e) => setForm({ ...form, openHouseTime: e.target.value })} />
                 </>
               )}
-              <input required placeholder="Area unit (e.g. marla)" value={form.areaUnit} onChange={(e) => setForm({ ...form, areaUnit: e.target.value })} />
+              <input required placeholder="Area unit (e.g. sqft)" value={form.areaUnit} onChange={(e) => setForm({ ...form, areaUnit: e.target.value })} />
               <input type="number" min="0" placeholder="Area" value={form.area} onChange={(e) => setForm({ ...form, area: e.target.value })} />
               <input type="number" min="0" placeholder="Bedrooms" value={form.beds} onChange={(e) => setForm({ ...form, beds: e.target.value })} />
               <input type="number" min="0" placeholder="Bathrooms" value={form.baths} onChange={(e) => setForm({ ...form, baths: e.target.value })} />
