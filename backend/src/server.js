@@ -77,9 +77,9 @@ const sampleProperties = [
   {
     id: "property-1",
     title: "Luxury Family House",
-    location: "DHA Phase 6, Lahore",
-    price: 85000000,
-    currency: "PKR",
+    location: "Woodbridge, VA",
+    price: 850000,
+    currency: "USD",
     purpose: "sale",
     beds: 5,
     baths: 4,
@@ -160,7 +160,7 @@ function validateProperty(input) {
   const requiredText = ["title", "location", "purpose", "areaUnit"];
   const missing = requiredText.filter((field) => !String(input[field] || "").trim());
   if (missing.length) return `${missing.join(", ")} ${missing.length === 1 ? "is" : "are"} required.`;
-  if (!["sale", "rent", "open-house"].includes(input.purpose)) return "purpose must be sale, rent, or open-house.";
+  if (!["sale", "rent", "open-house", "investment"].includes(input.purpose)) return "purpose must be sale, rent, open-house, or investment.";
   if (input.purpose === "open-house" && !String(input.openHouseDate || "").trim()) return "An open-house date is required for open house events.";
   if (!Number.isFinite(Number(input.price)) || Number(input.price) < 0) return "price must be a valid positive number.";
   return null;
@@ -172,7 +172,7 @@ function normalizeProperty(input, previous = {}) {
     title: String(input.title).trim(),
     location: String(input.location).trim(),
     price: Number(input.price),
-    currency: String(input.currency || "PKR").trim(),
+    currency: String(input.currency || "USD").trim(),
     purpose: input.purpose,
     beds: Number(input.beds || 0),
     baths: Number(input.baths || 0),

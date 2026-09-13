@@ -329,11 +329,12 @@ function AdminPanel() {
               <h2>{editingId ? "Edit listing" : "Add a listing"}</h2>
               <input required placeholder="Property title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
               <input required placeholder="Location" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} />
-              <input required type="number" min="0" placeholder="Price (PKR)" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} />
+              <input required type="number" min="0" placeholder="Price (USD)" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} />
               <select value={form.purpose} onChange={(e) => setForm({ ...form, purpose: e.target.value })}>
                 <option value="sale">For sale</option>
                 <option value="rent">For rent</option>
                 <option value="open-house">Open house event</option>
+                <option value="investment">Investment</option>
               </select>
               {form.purpose === "open-house" && (
                 <>

@@ -9,14 +9,14 @@ const initialProperties = [
   {
     id: 1,
     title: "Luxury Family House",
-    location: "DHA Phase 6, Lahore",
-    price: "PKR 8.5 Crore",
+    location: "Woodbridge, VA",
+    price: "$850,000",
     type: "sale",
     beds: 5,
     baths: 4,
-    area: "1 Kanal",
+    area: "4,500 sqft",
     description:
-      "Stunning contemporary 1 Kanal luxury house featuring high-end architecture, designer fittings, imported marble flooring, dual kitchens, spacious lawn, and dedicated servant quarters.",
+      "Stunning contemporary luxury house featuring high-end architecture, designer fittings, imported marble flooring, dual kitchens, a spacious lawn, and a finished basement.",
     image:
       "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=80",
     gallery: [
@@ -28,14 +28,14 @@ const initialProperties = [
   {
     id: 2,
     title: "Modern Villa",
-    location: "Bahria Town, Lahore",
-    price: "PKR 5.2 Crore",
+    location: "Vienna, VA",
+    price: "$620,000",
     type: "sale",
     beds: 4,
     baths: 4,
-    area: "10 Marla",
+    area: "3,200 sqft",
     description:
-      "Elegantly designed modern villa located in a prime sector. Offers open-plan living rooms, a rooftop terrace, smartly planned storage spaces, and garage parking for 2 cars.",
+      "Elegantly designed modern villa located in a prime neighborhood. Offers open-plan living rooms, a rooftop terrace, smartly planned storage spaces, and a 2-car garage.",
     image:
       "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=900&q=80",
     gallery: [
@@ -46,14 +46,14 @@ const initialProperties = [
   {
     id: 3,
     title: "Contemporary House",
-    location: "Gulberg, Lahore",
-    price: "PKR 12 Crore",
+    location: "Arlington, VA",
+    price: "$1,450,000",
     type: "sale",
     beds: 6,
     baths: 5,
-    area: "2 Kanal",
+    area: "5,800 sqft",
     description:
-      "Palatial home in the heart of Gulberg. Features custom woodwork, private swimming pool, smart home automation, expansive garden, and basement entertainment hall.",
+      "Palatial home in the heart of Arlington. Features custom woodwork, a private swimming pool, smart home automation, an expansive garden, and a basement entertainment hall.",
     image:
       "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=900&q=80",
     gallery: [
@@ -64,14 +64,14 @@ const initialProperties = [
   {
     id: 4,
     title: "Cozy City Apartment",
-    location: "Johar Town, Lahore",
-    price: "PKR 85,000 / month",
+    location: "Alexandria, VA",
+    price: "$1,800 / month",
     type: "rent",
     beds: 2,
     baths: 2,
-    area: "5 Marla",
+    area: "900 sqft",
     description:
-      "Stylish 2-bed apartment in a secure gated building. Close to top universities, shopping malls, and main avenues. Includes dedicated basement parking and 24/7 backup power.",
+      "Stylish 2-bed apartment in a secure gated building. Close to top universities, shopping centers, and main avenues. Includes dedicated garage parking and 24/7 building security.",
     image:
       "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=900&q=80",
     gallery: [
@@ -82,12 +82,12 @@ const initialProperties = [
   {
     id: 5,
     title: "Furnished Family Home",
-    location: "DHA Phase 5, Lahore",
-    price: "PKR 220,000 / month",
+    location: "Fairfax, VA",
+    price: "$3,200 / month",
     type: "rent",
     beds: 4,
     baths: 3,
-    area: "10 Marla",
+    area: "2,600 sqft",
     description:
       "Fully furnished residence ready for immediate move-in. Complete with modern appliances, stylish furniture sets, central air conditioning, and a beautiful front lawn.",
     image:
@@ -100,14 +100,14 @@ const initialProperties = [
   {
     id: 6,
     title: "Executive Penthouse",
-    location: "Gulberg, Lahore",
-    price: "PKR 350,000 / month",
+    location: "Tysons, VA",
+    price: "$4,500 / month",
     type: "rent",
     beds: 3,
     baths: 3,
-    area: "8 Marla",
+    area: "2,100 sqft",
     description:
-      "Top-floor luxury penthouse with panoramic city views, private Jacuzzi, open kitchen bar, private elevator access, and premium concierge services.",
+      "Top-floor luxury penthouse with panoramic city views, a private Jacuzzi, open kitchen bar, private elevator access, and premium concierge services.",
     image:
       "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=900&q=80",
     gallery: [
@@ -186,6 +186,13 @@ const defaultSiteContent = {
   footerTagline: "Premium Properties & Real Estate Solutions",
   footerCopyright: "© 2026 Real Estate. All Rights Reserved.",
 };
+
+function formatPrice(property) {
+  if (typeof property.price !== "number") return property.price;
+  const currency = property.currency || "USD";
+  const symbol = currency === "USD" ? "$" : `${currency} `;
+  return `${symbol}${property.price.toLocaleString()}`;
+}
 
 function App() {
   if (window.location.pathname.startsWith("/admin")) {
@@ -475,6 +482,12 @@ function App() {
           >
             Open Houses
           </button>
+          <button
+            className={`tab-btn ${filterType === "investment" ? "active" : ""}`}
+            onClick={() => setFilterType("investment")}
+          >
+            Investment
+          </button>
         </div>
 
         <div className="property-grid">
@@ -507,6 +520,8 @@ function App() {
                         ? "OPEN HOUSE"
                         : purpose === "rent"
                         ? "FOR RENT"
+                        : purpose === "investment"
+                        ? "INVESTMENT"
                         : "FOR SALE"}
                     </div>
 
@@ -518,11 +533,7 @@ function App() {
 
                     <h3>{property.title}</h3>
 
-                    <h2>
-                      {typeof property.price === "number"
-                        ? `${property.currency || "PKR"} ${property.price.toLocaleString()}`
-                        : property.price}
-                    </h2>
+                    <h2>{formatPrice(property)}</h2>
 
                     {purpose === "open-house" && (
                       <p className="location">
@@ -588,13 +599,19 @@ function App() {
               </div>
 
               <div className="modal-info">
-                <span className="modal-badge">
+                <span
+                  className="modal-badge"
+                  data-type={selectedProperty.purpose || selectedProperty.type}
+                >
                   {(selectedProperty.purpose || selectedProperty.type) ===
                   "open-house"
                     ? "OPEN HOUSE"
                     : (selectedProperty.purpose || selectedProperty.type) ===
                       "rent"
                     ? "FOR RENT"
+                    : (selectedProperty.purpose || selectedProperty.type) ===
+                      "investment"
+                    ? "INVESTMENT"
                     : "FOR SALE"}
                 </span>
 
@@ -604,9 +621,7 @@ function App() {
                 </p>
 
                 <h3 className="modal-price">
-                  {typeof selectedProperty.price === "number"
-                    ? `${selectedProperty.currency || "PKR"} ${selectedProperty.price.toLocaleString()}`
-                    : selectedProperty.price}
+                  {formatPrice(selectedProperty)}
                 </h3>
 
                 <div className="modal-specs">
